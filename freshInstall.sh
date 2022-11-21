@@ -1,10 +1,15 @@
+#!/bin/bash
+
 sudo apt-get install software-properties-common
 sudo apt-add-repository universe
 sudo apt-get update
 sudo apt-get install -y python-pip
 sudo apt install -y make
-sudo apt install -y nodejs
-sudo apt install -y npm
+
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+source ~/.bashrc
+nvm install 16
+nvm use 16
 
 sudo cp -r gcc-arm-none-eabi-7-2017-q4-major/* /usr/local
 
