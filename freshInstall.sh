@@ -6,10 +6,12 @@ sudo apt-get update
 sudo apt-get install -y python-pip
 sudo apt install -y make
 
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
-source ~/.bashrc
-nvm install 16
-nvm use 16
+# the installation of node depends on the computer/debian version
+# sudo apt install nodejs
+# wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+# source ~/.bashrc
+# nvm install 16
+# nvm use 16
 
 sudo cp -r gcc-arm-none-eabi-7-2017-q4-major/* /usr/local
 
