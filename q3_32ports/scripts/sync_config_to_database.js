@@ -4,7 +4,7 @@ const fetch = require('node-fetch')
 console.log(process.argv)
 
 // fs.writeFileSync(__dirname + '/bleid.txt', JSON.parse(fs.readFileSync(__dirname + '/build/config.json')).public_key.substring(0, 8))
-const config = JSON.parse(fs.readFileSync(`${__dirname}/build/config.json`).toString())
+const config = JSON.parse(fs.readFileSync(`${__dirname}/../build/config.json`).toString())
 const bleid = config.public_key.substring(0, 8)
 
 console.log(config)
