@@ -38,19 +38,19 @@ npm i
 
 ln -sTf `pwd`/node_modules `pwd`/q1/node_modules
 ln -sTf `pwd`/node_modules `pwd`/q2/node_modules
-ln -sTf `pwd`/node_modules `pwd`/q3_16ports/node_modules
-ln -sTf `pwd`/node_modules `pwd`/q3_32ports/node_modules
+ln -sTf `pwd`/node_modules `pwd`/q3_16/node_modules
+ln -sTf `pwd`/node_modules `pwd`/q3_32/node_modules
 
 
 ln -sTf `pwd`/nRF5_SDK_15.0.0_a53641a `pwd`/q1/nRF5_SDK_15.0.0_a53641a
 ln -sTf `pwd`/nRF5_SDK_15.0.0_a53641a `pwd`/q2/nRF5_SDK_15.0.0_a53641a
-ln -sTf `pwd`/nRF5_SDK_15.0.0_a53641a `pwd`/q3_16ports/nRF5_SDK_15.0.0_a53641a
-ln -sTf `pwd`/nRF5_SDK_15.0.0_a53641a `pwd`/q3_32ports/nRF5_SDK_15.0.0_a53641a
+ln -sTf `pwd`/nRF5_SDK_15.0.0_a53641a `pwd`/q3_16/nRF5_SDK_15.0.0_a53641a
+ln -sTf `pwd`/nRF5_SDK_15.0.0_a53641a `pwd`/q3_32/nRF5_SDK_15.0.0_a53641a
 
 
 ln -sTf `pwd`/gcc-arm-none-eabi-7-2017-q4-major `pwd`/q1/gcc-arm-none-eabi-7-2017-q4-major
 ln -sTf `pwd`/gcc-arm-none-eabi-7-2017-q4-major `pwd`/q2/gcc-arm-none-eabi-7-2017-q4-major
-ln -sTf `pwd`/gcc-arm-none-eabi-7-2017-q4-major `pwd`/q3_16ports/gcc-arm-none-eabi-7-2017-q4-major
-ln -sTf `pwd`/gcc-arm-none-eabi-7-2017-q4-major `pwd`/q3_32ports/gcc-arm-none-eabi-7-2017-q4-major
+ln -sTf `pwd`/gcc-arm-none-eabi-7-2017-q4-major `pwd`/q3_16/gcc-arm-none-eabi-7-2017-q4-major
+ln -sTf `pwd`/gcc-arm-none-eabi-7-2017-q4-major `pwd`/q3_32/gcc-arm-none-eabi-7-2017-q4-major
 
 echo 'PATH=~/.local/bin:$PATH' >> ~/.bashrc
