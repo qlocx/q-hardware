@@ -3,6 +3,7 @@
 
 RED='\033[1;91m'
 BLACK='\033[1;90m'
+WHITE_BG='\033[1;47m'
 NOCOLOR='\033[0m'
 
 # write with asci formatting
@@ -22,7 +23,7 @@ echo -e ""
 echo -e ""
 echo -e ""
 
-echo -e "${RED}"
+echo -e "${WHITE_BG}${RED}"
 echo "                                 ____        __ ";
 echo "                                / __ \      /_ |";
 echo "                               | |  | |      | |";
