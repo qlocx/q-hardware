@@ -21,7 +21,7 @@ try {
 }
 
 
-const [, , destinedSystem = 'qlocx'] = process.argv
+const [, , destinedSystem = 'iboxen'] = process.argv
 
 let URL
 const JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJxbG9jeHByb2dyYW1tZXIxIiwiaWF0IjoiIn0.uZ39hx-S4rcrApB4_FoYLNe4ecXHW2i--oA2djYc3eE'
