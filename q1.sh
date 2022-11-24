@@ -10,7 +10,7 @@ echo -e "${WHITE_BG}${RED}This is a test${NOCOLOR}"
 
 # write with asci formatting
 
-echo "${WHITE_BG}"
+echo -e "${WHITE_BG}"
 echo "  _____                                               _               _                         _   ";
 echo " |  __ \                                             (_)             | |                       | |_ ";
 echo " | |__) | __ ___   __ _ _ __ __ _ _ __ ___  _ __ ___  _ _ __   __ _  | |__   ___   __ _ _ __ __| (_)";
@@ -20,12 +20,12 @@ echo " |_|   |_|  \___/ \__, |_|  \__,_|_| |_| |_|_| |_| |_|_|_| |_|\__, | |_.__
 echo "                   __/ |                                       __/ |                                ";
 echo "                  |___/                                       |___/                                 ";
 
-echo "${WHITE_BG}"
-echo "${WHITE_BG}"
-echo "${WHITE_BG}"
-echo "${WHITE_BG}"
+echo -e "${WHITE_BG}"
+echo -e "${WHITE_BG}"
+echo -e "${WHITE_BG}"
+echo -e "${WHITE_BG}"
 
-echo "${RED}${WHITE_BG}"
+echo -e "${RED}${WHITE_BG}"
 echo "                                 ____        __ ";
 echo "                                / __ \      /_ |";
 echo "                               | |  | |      | |";
@@ -34,10 +34,10 @@ echo "                               | |__| |      | |";
 echo "                                \___\_\      |_|";
 
 
-echo "${NOCOLOR}${WHITE_BG}"
-echo "${WHITE_BG}"
-echo "${WHITE_BG}"
-echo "${WHITE_BG}"
+echo -e "${NOCOLOR}${WHITE_BG}"
+echo -e "${WHITE_BG}"
+echo -e "${WHITE_BG}"
+echo -e "${WHITE_BG}"
 
 echo "  _____                                _              _                          _   _                                __   __  _                    _ _   ";
 echo " |  __ \                              | |            | |                        | | (_)                               \ \ / / | |                  (_) |  ";
@@ -47,7 +47,7 @@ echo " | |   | | |  __/\__ \__ \ |  __/ | | | ||  __/ |    | || (_) | | (_| (_) 
 echo " |_|   |_|  \___||___/___/  \___|_| |_|\__\___|_|     \__\___/   \___\___/|_| |_|\__|_|_| |_|\__,_|\___|  \___/|_|    /_/ \_\  \__\___/   \___/_/\_\_|\__|";
 echo "                                                                                                                                                          ";
 echo "                                                                                                                                                          ";
-echo "${NO_COLOR}"
+echo -e "${NO_COLOR}"
 
 read -n 1 -s key
 
