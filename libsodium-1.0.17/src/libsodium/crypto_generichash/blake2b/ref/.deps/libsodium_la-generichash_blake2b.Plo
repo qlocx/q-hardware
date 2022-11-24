@@ -1,0 +1,105 @@
+crypto_generichash/blake2b/ref/libsodium_la-generichash_blake2b.lo: \
+ crypto_generichash/blake2b/ref/generichash_blake2b.c \
+ /usr/local/arm-none-eabi/include/assert.h \
+ /usr/local/arm-none-eabi/include/_ansi.h \
+ /usr/local/arm-none-eabi/include/newlib.h \
+ /usr/local/arm-none-eabi/include/_newlib_version.h \
+ /usr/local/arm-none-eabi/include/sys/config.h \
+ /usr/local/arm-none-eabi/include/machine/ieeefp.h \
+ /usr/local/arm-none-eabi/include/sys/features.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h \
+ /usr/local/arm-none-eabi/include/limits.h \
+ /usr/local/arm-none-eabi/include/sys/cdefs.h \
+ /usr/local/arm-none-eabi/include/machine/_default_types.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
+ /usr/local/arm-none-eabi/include/stdint.h \
+ /usr/local/arm-none-eabi/include/sys/_intsup.h \
+ /usr/local/arm-none-eabi/include/sys/_stdint.h \
+ crypto_generichash/blake2b/ref/blake2.h \
+ include/sodium/crypto_generichash_blake2b.h \
+ /usr/local/arm-none-eabi/include/stdlib.h \
+ /usr/local/arm-none-eabi/include/sys/reent.h \
+ /usr/local/arm-none-eabi/include/_ansi.h \
+ /usr/local/arm-none-eabi/include/sys/_types.h \
+ /usr/local/arm-none-eabi/include/machine/_types.h \
+ /usr/local/arm-none-eabi/include/sys/lock.h \
+ /usr/local/arm-none-eabi/include/machine/stdlib.h \
+ /usr/local/arm-none-eabi/include/alloca.h \
+ /usr/local/arm-none-eabi/include/xlocale.h include/sodium/export.h \
+ include/sodium/export.h include/sodium/private/common.h \
+ /usr/local/arm-none-eabi/include/string.h \
+ /usr/local/arm-none-eabi/include/strings.h \
+ /usr/local/arm-none-eabi/include/sys/string.h \
+ include/sodium/private/implementations.h
+
+/usr/local/arm-none-eabi/include/assert.h:
+
+/usr/local/arm-none-eabi/include/_ansi.h:
+
+/usr/local/arm-none-eabi/include/newlib.h:
+
+/usr/local/arm-none-eabi/include/_newlib_version.h:
+
+/usr/local/arm-none-eabi/include/sys/config.h:
+
+/usr/local/arm-none-eabi/include/machine/ieeefp.h:
+
+/usr/local/arm-none-eabi/include/sys/features.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h:
+
+/usr/local/arm-none-eabi/include/limits.h:
+
+/usr/local/arm-none-eabi/include/sys/cdefs.h:
+
+/usr/local/arm-none-eabi/include/machine/_default_types.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/sys/_intsup.h:
+
+/usr/local/arm-none-eabi/include/sys/_stdint.h:
+
+crypto_generichash/blake2b/ref/blake2.h:
+
+include/sodium/crypto_generichash_blake2b.h:
+
+/usr/local/arm-none-eabi/include/stdlib.h:
+
+/usr/local/arm-none-eabi/include/sys/reent.h:
+
+/usr/local/arm-none-eabi/include/_ansi.h:
+
+/usr/local/arm-none-eabi/include/sys/_types.h:
+
+/usr/local/arm-none-eabi/include/machine/_types.h:
+
+/usr/local/arm-none-eabi/include/sys/lock.h:
+
+/usr/local/arm-none-eabi/include/machine/stdlib.h:
+
+/usr/local/arm-none-eabi/include/alloca.h:
+
+/usr/local/arm-none-eabi/include/xlocale.h:
+
+include/sodium/export.h:
+
+include/sodium/export.h:
+
+include/sodium/private/common.h:
+
+/usr/local/arm-none-eabi/include/string.h:
+
+/usr/local/arm-none-eabi/include/strings.h:
+
+/usr/local/arm-none-eabi/include/sys/string.h:
+
+include/sodium/private/implementations.h:

@@ -1,0 +1,146 @@
+crypto_sign/ed25519/ref10/libsodium_la-sign.lo: \
+ crypto_sign/ed25519/ref10/sign.c \
+ /usr/local/arm-none-eabi/include/string.h \
+ /usr/local/arm-none-eabi/include/_ansi.h \
+ /usr/local/arm-none-eabi/include/newlib.h \
+ /usr/local/arm-none-eabi/include/_newlib_version.h \
+ /usr/local/arm-none-eabi/include/sys/config.h \
+ /usr/local/arm-none-eabi/include/machine/ieeefp.h \
+ /usr/local/arm-none-eabi/include/sys/features.h \
+ /usr/local/arm-none-eabi/include/sys/reent.h \
+ /usr/local/arm-none-eabi/include/_ansi.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h \
+ /usr/local/arm-none-eabi/include/sys/_types.h \
+ /usr/local/arm-none-eabi/include/machine/_types.h \
+ /usr/local/arm-none-eabi/include/machine/_default_types.h \
+ /usr/local/arm-none-eabi/include/sys/lock.h \
+ /usr/local/arm-none-eabi/include/sys/cdefs.h \
+ /usr/local/arm-none-eabi/include/xlocale.h \
+ /usr/local/arm-none-eabi/include/strings.h \
+ /usr/local/arm-none-eabi/include/sys/string.h \
+ include/sodium/crypto_hash_sha512.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
+ /usr/local/arm-none-eabi/include/stdint.h \
+ /usr/local/arm-none-eabi/include/sys/_intsup.h \
+ /usr/local/arm-none-eabi/include/sys/_stdint.h \
+ /usr/local/arm-none-eabi/include/stdlib.h \
+ /usr/local/arm-none-eabi/include/machine/stdlib.h \
+ /usr/local/arm-none-eabi/include/alloca.h include/sodium/export.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h \
+ /usr/local/arm-none-eabi/include/limits.h \
+ include/sodium/crypto_sign_ed25519.h include/sodium/crypto_hash_sha512.h \
+ crypto_sign/ed25519/ref10/sign_ed25519_ref10.h \
+ include/sodium/private/ed25519_ref10.h \
+ include/sodium/private/ed25519_ref10_fe_25_5.h \
+ include/sodium/private/common.h include/sodium/utils.h \
+ include/sodium/randombytes.h \
+ /usr/local/arm-none-eabi/include/sys/types.h \
+ /usr/local/arm-none-eabi/include/machine/endian.h \
+ /usr/local/arm-none-eabi/include/machine/_endian.h \
+ /usr/local/arm-none-eabi/include/sys/select.h \
+ /usr/local/arm-none-eabi/include/sys/_sigset.h \
+ /usr/local/arm-none-eabi/include/sys/_timeval.h \
+ /usr/local/arm-none-eabi/include/sys/timespec.h \
+ /usr/local/arm-none-eabi/include/sys/_timespec.h \
+ /usr/local/arm-none-eabi/include/sys/_pthreadtypes.h \
+ /usr/local/arm-none-eabi/include/sys/sched.h \
+ /usr/local/arm-none-eabi/include/machine/types.h
+
+/usr/local/arm-none-eabi/include/string.h:
+
+/usr/local/arm-none-eabi/include/_ansi.h:
+
+/usr/local/arm-none-eabi/include/newlib.h:
+
+/usr/local/arm-none-eabi/include/_newlib_version.h:
+
+/usr/local/arm-none-eabi/include/sys/config.h:
+
+/usr/local/arm-none-eabi/include/machine/ieeefp.h:
+
+/usr/local/arm-none-eabi/include/sys/features.h:
+
+/usr/local/arm-none-eabi/include/sys/reent.h:
+
+/usr/local/arm-none-eabi/include/_ansi.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h:
+
+/usr/local/arm-none-eabi/include/sys/_types.h:
+
+/usr/local/arm-none-eabi/include/machine/_types.h:
+
+/usr/local/arm-none-eabi/include/machine/_default_types.h:
+
+/usr/local/arm-none-eabi/include/sys/lock.h:
+
+/usr/local/arm-none-eabi/include/sys/cdefs.h:
+
+/usr/local/arm-none-eabi/include/xlocale.h:
+
+/usr/local/arm-none-eabi/include/strings.h:
+
+/usr/local/arm-none-eabi/include/sys/string.h:
+
+include/sodium/crypto_hash_sha512.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/sys/_intsup.h:
+
+/usr/local/arm-none-eabi/include/sys/_stdint.h:
+
+/usr/local/arm-none-eabi/include/stdlib.h:
+
+/usr/local/arm-none-eabi/include/machine/stdlib.h:
+
+/usr/local/arm-none-eabi/include/alloca.h:
+
+include/sodium/export.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h:
+
+/usr/local/arm-none-eabi/include/limits.h:
+
+include/sodium/crypto_sign_ed25519.h:
+
+include/sodium/crypto_hash_sha512.h:
+
+crypto_sign/ed25519/ref10/sign_ed25519_ref10.h:
+
+include/sodium/private/ed25519_ref10.h:
+
+include/sodium/private/ed25519_ref10_fe_25_5.h:
+
+include/sodium/private/common.h:
+
+include/sodium/utils.h:
+
+include/sodium/randombytes.h:
+
+/usr/local/arm-none-eabi/include/sys/types.h:
+
+/usr/local/arm-none-eabi/include/machine/endian.h:
+
+/usr/local/arm-none-eabi/include/machine/_endian.h:
+
+/usr/local/arm-none-eabi/include/sys/select.h:
+
+/usr/local/arm-none-eabi/include/sys/_sigset.h:
+
+/usr/local/arm-none-eabi/include/sys/_timeval.h:
+
+/usr/local/arm-none-eabi/include/sys/timespec.h:
+
+/usr/local/arm-none-eabi/include/sys/_timespec.h:
+
+/usr/local/arm-none-eabi/include/sys/_pthreadtypes.h:
+
+/usr/local/arm-none-eabi/include/sys/sched.h:
+
+/usr/local/arm-none-eabi/include/machine/types.h:

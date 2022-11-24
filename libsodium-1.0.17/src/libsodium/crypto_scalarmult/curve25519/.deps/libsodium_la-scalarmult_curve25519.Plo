@@ -1,0 +1,62 @@
+crypto_scalarmult/curve25519/libsodium_la-scalarmult_curve25519.lo: \
+ crypto_scalarmult/curve25519/scalarmult_curve25519.c \
+ include/sodium/crypto_scalarmult_curve25519.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h \
+ include/sodium/export.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
+ /usr/local/arm-none-eabi/include/stdint.h \
+ /usr/local/arm-none-eabi/include/machine/_default_types.h \
+ /usr/local/arm-none-eabi/include/sys/features.h \
+ /usr/local/arm-none-eabi/include/_newlib_version.h \
+ /usr/local/arm-none-eabi/include/sys/_intsup.h \
+ /usr/local/arm-none-eabi/include/sys/_stdint.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h \
+ /usr/local/arm-none-eabi/include/limits.h \
+ /usr/local/arm-none-eabi/include/newlib.h \
+ /usr/local/arm-none-eabi/include/sys/cdefs.h \
+ include/sodium/private/implementations.h \
+ crypto_scalarmult/curve25519/scalarmult_curve25519.h \
+ include/sodium/runtime.h \
+ crypto_scalarmult/curve25519/ref10/x25519_ref10.h \
+ crypto_scalarmult/curve25519/ref10/../scalarmult_curve25519.h
+
+include/sodium/crypto_scalarmult_curve25519.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h:
+
+include/sodium/export.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/machine/_default_types.h:
+
+/usr/local/arm-none-eabi/include/sys/features.h:
+
+/usr/local/arm-none-eabi/include/_newlib_version.h:
+
+/usr/local/arm-none-eabi/include/sys/_intsup.h:
+
+/usr/local/arm-none-eabi/include/sys/_stdint.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h:
+
+/usr/local/arm-none-eabi/include/limits.h:
+
+/usr/local/arm-none-eabi/include/newlib.h:
+
+/usr/local/arm-none-eabi/include/sys/cdefs.h:
+
+include/sodium/private/implementations.h:
+
+crypto_scalarmult/curve25519/scalarmult_curve25519.h:
+
+include/sodium/runtime.h:
+
+crypto_scalarmult/curve25519/ref10/x25519_ref10.h:
+
+crypto_scalarmult/curve25519/ref10/../scalarmult_curve25519.h:

@@ -1,0 +1,51 @@
+crypto_box/libsodium_la-crypto_box.lo: crypto_box/crypto_box.c \
+ include/sodium/crypto_box.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h \
+ include/sodium/crypto_box_curve25519xsalsa20poly1305.h \
+ include/sodium/crypto_stream_xsalsa20.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
+ /usr/local/arm-none-eabi/include/stdint.h \
+ /usr/local/arm-none-eabi/include/machine/_default_types.h \
+ /usr/local/arm-none-eabi/include/sys/features.h \
+ /usr/local/arm-none-eabi/include/_newlib_version.h \
+ /usr/local/arm-none-eabi/include/sys/_intsup.h \
+ /usr/local/arm-none-eabi/include/sys/_stdint.h include/sodium/export.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h \
+ /usr/local/arm-none-eabi/include/limits.h \
+ /usr/local/arm-none-eabi/include/newlib.h \
+ /usr/local/arm-none-eabi/include/sys/cdefs.h
+
+include/sodium/crypto_box.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h:
+
+include/sodium/crypto_box_curve25519xsalsa20poly1305.h:
+
+include/sodium/crypto_stream_xsalsa20.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/machine/_default_types.h:
+
+/usr/local/arm-none-eabi/include/sys/features.h:
+
+/usr/local/arm-none-eabi/include/_newlib_version.h:
+
+/usr/local/arm-none-eabi/include/sys/_intsup.h:
+
+/usr/local/arm-none-eabi/include/sys/_stdint.h:
+
+include/sodium/export.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h:
+
+/usr/local/arm-none-eabi/include/limits.h:
+
+/usr/local/arm-none-eabi/include/newlib.h:
+
+/usr/local/arm-none-eabi/include/sys/cdefs.h:

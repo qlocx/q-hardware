@@ -1,0 +1,149 @@
+crypto_box/curve25519xchacha20poly1305/libsodium_la-box_curve25519xchacha20poly1305.lo: \
+ crypto_box/curve25519xchacha20poly1305/box_curve25519xchacha20poly1305.c \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h \
+ /usr/local/arm-none-eabi/include/limits.h \
+ /usr/local/arm-none-eabi/include/newlib.h \
+ /usr/local/arm-none-eabi/include/_newlib_version.h \
+ /usr/local/arm-none-eabi/include/sys/cdefs.h \
+ /usr/local/arm-none-eabi/include/machine/_default_types.h \
+ /usr/local/arm-none-eabi/include/sys/features.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
+ /usr/local/arm-none-eabi/include/stdint.h \
+ /usr/local/arm-none-eabi/include/sys/_intsup.h \
+ /usr/local/arm-none-eabi/include/sys/_stdint.h \
+ /usr/local/arm-none-eabi/include/stdlib.h \
+ /usr/local/arm-none-eabi/include/machine/ieeefp.h \
+ /usr/local/arm-none-eabi/include/_ansi.h \
+ /usr/local/arm-none-eabi/include/sys/config.h \
+ /usr/local/arm-none-eabi/include/sys/reent.h \
+ /usr/local/arm-none-eabi/include/_ansi.h \
+ /usr/local/arm-none-eabi/include/sys/_types.h \
+ /usr/local/arm-none-eabi/include/machine/_types.h \
+ /usr/local/arm-none-eabi/include/sys/lock.h \
+ /usr/local/arm-none-eabi/include/machine/stdlib.h \
+ /usr/local/arm-none-eabi/include/alloca.h \
+ /usr/local/arm-none-eabi/include/xlocale.h \
+ /usr/local/arm-none-eabi/include/string.h \
+ /usr/local/arm-none-eabi/include/strings.h \
+ /usr/local/arm-none-eabi/include/sys/string.h include/sodium/core.h \
+ include/sodium/export.h \
+ include/sodium/crypto_box_curve25519xchacha20poly1305.h \
+ include/sodium/crypto_stream_xchacha20.h \
+ include/sodium/crypto_core_hchacha20.h \
+ include/sodium/crypto_hash_sha512.h \
+ include/sodium/crypto_scalarmult_curve25519.h \
+ include/sodium/crypto_secretbox_xchacha20poly1305.h \
+ include/sodium/private/common.h include/sodium/randombytes.h \
+ /usr/local/arm-none-eabi/include/sys/types.h \
+ /usr/local/arm-none-eabi/include/machine/endian.h \
+ /usr/local/arm-none-eabi/include/machine/_endian.h \
+ /usr/local/arm-none-eabi/include/sys/select.h \
+ /usr/local/arm-none-eabi/include/sys/_sigset.h \
+ /usr/local/arm-none-eabi/include/sys/_timeval.h \
+ /usr/local/arm-none-eabi/include/sys/timespec.h \
+ /usr/local/arm-none-eabi/include/sys/_timespec.h \
+ /usr/local/arm-none-eabi/include/sys/_pthreadtypes.h \
+ /usr/local/arm-none-eabi/include/sys/sched.h \
+ /usr/local/arm-none-eabi/include/machine/types.h include/sodium/utils.h
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h:
+
+/usr/local/arm-none-eabi/include/limits.h:
+
+/usr/local/arm-none-eabi/include/newlib.h:
+
+/usr/local/arm-none-eabi/include/_newlib_version.h:
+
+/usr/local/arm-none-eabi/include/sys/cdefs.h:
+
+/usr/local/arm-none-eabi/include/machine/_default_types.h:
+
+/usr/local/arm-none-eabi/include/sys/features.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/sys/_intsup.h:
+
+/usr/local/arm-none-eabi/include/sys/_stdint.h:
+
+/usr/local/arm-none-eabi/include/stdlib.h:
+
+/usr/local/arm-none-eabi/include/machine/ieeefp.h:
+
+/usr/local/arm-none-eabi/include/_ansi.h:
+
+/usr/local/arm-none-eabi/include/sys/config.h:
+
+/usr/local/arm-none-eabi/include/sys/reent.h:
+
+/usr/local/arm-none-eabi/include/_ansi.h:
+
+/usr/local/arm-none-eabi/include/sys/_types.h:
+
+/usr/local/arm-none-eabi/include/machine/_types.h:
+
+/usr/local/arm-none-eabi/include/sys/lock.h:
+
+/usr/local/arm-none-eabi/include/machine/stdlib.h:
+
+/usr/local/arm-none-eabi/include/alloca.h:
+
+/usr/local/arm-none-eabi/include/xlocale.h:
+
+/usr/local/arm-none-eabi/include/string.h:
+
+/usr/local/arm-none-eabi/include/strings.h:
+
+/usr/local/arm-none-eabi/include/sys/string.h:
+
+include/sodium/core.h:
+
+include/sodium/export.h:
+
+include/sodium/crypto_box_curve25519xchacha20poly1305.h:
+
+include/sodium/crypto_stream_xchacha20.h:
+
+include/sodium/crypto_core_hchacha20.h:
+
+include/sodium/crypto_hash_sha512.h:
+
+include/sodium/crypto_scalarmult_curve25519.h:
+
+include/sodium/crypto_secretbox_xchacha20poly1305.h:
+
+include/sodium/private/common.h:
+
+include/sodium/randombytes.h:
+
+/usr/local/arm-none-eabi/include/sys/types.h:
+
+/usr/local/arm-none-eabi/include/machine/endian.h:
+
+/usr/local/arm-none-eabi/include/machine/_endian.h:
+
+/usr/local/arm-none-eabi/include/sys/select.h:
+
+/usr/local/arm-none-eabi/include/sys/_sigset.h:
+
+/usr/local/arm-none-eabi/include/sys/_timeval.h:
+
+/usr/local/arm-none-eabi/include/sys/timespec.h:
+
+/usr/local/arm-none-eabi/include/sys/_timespec.h:
+
+/usr/local/arm-none-eabi/include/sys/_pthreadtypes.h:
+
+/usr/local/arm-none-eabi/include/sys/sched.h:
+
+/usr/local/arm-none-eabi/include/machine/types.h:
+
+include/sodium/utils.h:

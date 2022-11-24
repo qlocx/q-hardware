@@ -1,0 +1,58 @@
+crypto_stream/salsa20/ref/libsodium_la-salsa20_ref.lo: \
+ crypto_stream/salsa20/ref/salsa20_ref.c \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
+ /usr/local/arm-none-eabi/include/stdint.h \
+ /usr/local/arm-none-eabi/include/machine/_default_types.h \
+ /usr/local/arm-none-eabi/include/sys/features.h \
+ /usr/local/arm-none-eabi/include/_newlib_version.h \
+ /usr/local/arm-none-eabi/include/sys/_intsup.h \
+ /usr/local/arm-none-eabi/include/sys/_stdint.h \
+ include/sodium/crypto_core_salsa20.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h \
+ include/sodium/export.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h \
+ /usr/local/arm-none-eabi/include/limits.h \
+ /usr/local/arm-none-eabi/include/newlib.h \
+ /usr/local/arm-none-eabi/include/sys/cdefs.h \
+ include/sodium/crypto_stream_salsa20.h include/sodium/utils.h \
+ crypto_stream/salsa20/ref/../stream_salsa20.h \
+ crypto_stream/salsa20/ref/salsa20_ref.h
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/machine/_default_types.h:
+
+/usr/local/arm-none-eabi/include/sys/features.h:
+
+/usr/local/arm-none-eabi/include/_newlib_version.h:
+
+/usr/local/arm-none-eabi/include/sys/_intsup.h:
+
+/usr/local/arm-none-eabi/include/sys/_stdint.h:
+
+include/sodium/crypto_core_salsa20.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h:
+
+include/sodium/export.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h:
+
+/usr/local/arm-none-eabi/include/limits.h:
+
+/usr/local/arm-none-eabi/include/newlib.h:
+
+/usr/local/arm-none-eabi/include/sys/cdefs.h:
+
+include/sodium/crypto_stream_salsa20.h:
+
+include/sodium/utils.h:
+
+crypto_stream/salsa20/ref/../stream_salsa20.h:
+
+crypto_stream/salsa20/ref/salsa20_ref.h:

@@ -1,0 +1,105 @@
+crypto_box/curve25519xchacha20poly1305/libsodium_la-box_seal_curve25519xchacha20poly1305.lo: \
+ crypto_box/curve25519xchacha20poly1305/box_seal_curve25519xchacha20poly1305.c \
+ /usr/local/arm-none-eabi/include/string.h \
+ /usr/local/arm-none-eabi/include/_ansi.h \
+ /usr/local/arm-none-eabi/include/newlib.h \
+ /usr/local/arm-none-eabi/include/_newlib_version.h \
+ /usr/local/arm-none-eabi/include/sys/config.h \
+ /usr/local/arm-none-eabi/include/machine/ieeefp.h \
+ /usr/local/arm-none-eabi/include/sys/features.h \
+ /usr/local/arm-none-eabi/include/sys/reent.h \
+ /usr/local/arm-none-eabi/include/_ansi.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h \
+ /usr/local/arm-none-eabi/include/sys/_types.h \
+ /usr/local/arm-none-eabi/include/machine/_types.h \
+ /usr/local/arm-none-eabi/include/machine/_default_types.h \
+ /usr/local/arm-none-eabi/include/sys/lock.h \
+ /usr/local/arm-none-eabi/include/sys/cdefs.h \
+ /usr/local/arm-none-eabi/include/xlocale.h \
+ /usr/local/arm-none-eabi/include/strings.h \
+ /usr/local/arm-none-eabi/include/sys/string.h \
+ include/sodium/crypto_box_curve25519xchacha20poly1305.h \
+ include/sodium/crypto_stream_xchacha20.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h \
+ /usr/local/arm-none-eabi/include/stdint.h \
+ /usr/local/arm-none-eabi/include/sys/_intsup.h \
+ /usr/local/arm-none-eabi/include/sys/_stdint.h include/sodium/export.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h \
+ /usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h \
+ /usr/local/arm-none-eabi/include/limits.h \
+ include/sodium/crypto_generichash.h \
+ include/sodium/crypto_generichash_blake2b.h \
+ /usr/local/arm-none-eabi/include/stdlib.h \
+ /usr/local/arm-none-eabi/include/machine/stdlib.h \
+ /usr/local/arm-none-eabi/include/alloca.h \
+ include/sodium/private/common.h include/sodium/utils.h
+
+/usr/local/arm-none-eabi/include/string.h:
+
+/usr/local/arm-none-eabi/include/_ansi.h:
+
+/usr/local/arm-none-eabi/include/newlib.h:
+
+/usr/local/arm-none-eabi/include/_newlib_version.h:
+
+/usr/local/arm-none-eabi/include/sys/config.h:
+
+/usr/local/arm-none-eabi/include/machine/ieeefp.h:
+
+/usr/local/arm-none-eabi/include/sys/features.h:
+
+/usr/local/arm-none-eabi/include/sys/reent.h:
+
+/usr/local/arm-none-eabi/include/_ansi.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stddef.h:
+
+/usr/local/arm-none-eabi/include/sys/_types.h:
+
+/usr/local/arm-none-eabi/include/machine/_types.h:
+
+/usr/local/arm-none-eabi/include/machine/_default_types.h:
+
+/usr/local/arm-none-eabi/include/sys/lock.h:
+
+/usr/local/arm-none-eabi/include/sys/cdefs.h:
+
+/usr/local/arm-none-eabi/include/xlocale.h:
+
+/usr/local/arm-none-eabi/include/strings.h:
+
+/usr/local/arm-none-eabi/include/sys/string.h:
+
+include/sodium/crypto_box_curve25519xchacha20poly1305.h:
+
+include/sodium/crypto_stream_xchacha20.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/stdint.h:
+
+/usr/local/arm-none-eabi/include/sys/_intsup.h:
+
+/usr/local/arm-none-eabi/include/sys/_stdint.h:
+
+include/sodium/export.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/limits.h:
+
+/usr/local/lib/gcc/arm-none-eabi/7.2.1/include-fixed/syslimits.h:
+
+/usr/local/arm-none-eabi/include/limits.h:
+
+include/sodium/crypto_generichash.h:
+
+include/sodium/crypto_generichash_blake2b.h:
+
+/usr/local/arm-none-eabi/include/stdlib.h:
+
+/usr/local/arm-none-eabi/include/machine/stdlib.h:
+
+/usr/local/arm-none-eabi/include/alloca.h:
+
+include/sodium/private/common.h:
+
+include/sodium/utils.h:
