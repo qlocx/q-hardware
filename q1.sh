@@ -1,7 +1,8 @@
 # git reset --hard HEAD
 # git pull
 
-RED='\033[0;91m'
+RED='\033[1;91m'
+BLACK='\033[1;90m'
 WHITE_BG='\033[1;47m'
 NOCOLOR='\033[0m'
 
@@ -10,7 +11,7 @@ echo -e "${WHITE_BG}${RED}This is a test${NOCOLOR}"
 
 # write with asci formatting
 
-echo -e "${WHITE_BG}"
+echo -e "${BLACK}${WHITE_BG}"
 echo "  _____                                               _               _                         _   ";
 echo " |  __ \                                             (_)             | |                       | |_ ";
 echo " | |__) | __ ___   __ _ _ __ __ _ _ __ ___  _ __ ___  _ _ __   __ _  | |__   ___   __ _ _ __ __| (_)";
@@ -34,7 +35,7 @@ echo "                               | |__| |      | |";
 echo "                                \___\_\      |_|";
 
 
-echo -e "${NOCOLOR}${WHITE_BG}"
+echo -e "${BLACK}${WHITE_BG}"
 echo -e "${WHITE_BG}"
 echo -e "${WHITE_BG}"
 echo -e "${WHITE_BG}"
