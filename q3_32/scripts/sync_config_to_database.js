@@ -13,7 +13,8 @@ fs.writeFileSync(`${__dirname}/bleid.txt`, bleid)
 
 try {
     fs.writeFileSync(`/home/robert/Qlocx/qtestserver/controller.json`, JSON.stringify(config))
-    console.log(e.execSync(`lp -d DYMO_LabelManager_PnP ${__dirname}/bleid.txt -o landscape -o page-top=15 -o media=Custom.12x24mm`).toString())
+    const printerName = execSync('lpstat -a | cut -f1 -d \' \'').toString().replace('\n', '')
+    console.log(execSync(`lp -d ${printerName} ../build/bleid.txt -o landscape -o page-top=15 -o media=Custom.12x22mm`).toString())
 } catch (e) {
     // console.log(e)
 }
@@ -40,7 +41,7 @@ const sendToAPI = async () => {
     const body = {
         publicKey: config.public_key,
         privateKey: config.private_key,
-        board: "q3_32"
+        board: "q3-32"
     }
 
     const result = await fetch(URL, {
@@ -59,11 +60,9 @@ const sendToAPI = async () => {
         console.log(`Qlocx sync: status ${result.status}, ${result.statusText}, ${jsonResult.message}`)
     } else {
         await sleep(1000)
-        try {
-            console.log(e.execSync("nrfjprog --reset").toString())
-        } catch { }
+
         console.log("\n===== Stoppa nu i batteriet i kretskortet =====")
-	console.log(`\n===== Kretskortet har fått ID: ${config.public_key.substring(0,8)} ===\n`)
+	    console.log(`\n===== Kretskortet har fått ID: ${config.public_key.substring(0,8)} ===\n`)
     }
 }
 
