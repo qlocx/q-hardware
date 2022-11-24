@@ -3,8 +3,6 @@
 
 RED='\033[1;91m'
 BLACK='\033[1;90m'
-WHITE_BG='\033[1;47m'
-NOCOLOR='\033[0m'
 
 # write with asci formatting
 
@@ -32,7 +30,9 @@ echo "                               | |__| |      | |";
 echo "                                \___\_\      |_|";
 
 
-echo -e "${NO_COLOR}${BLACK}"
+# transparend background
+
+echo -e "${BLACK}"
 echo -e ""
 echo -e ""
 echo -e ""
