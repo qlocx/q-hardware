@@ -1,6 +1,8 @@
 git reset --hard HEAD
 git pull
 
+bold=$(tput bold)
+normal=$(tput sgr0)
 
 echo "You are starting to program board ${bold}Q3 32${normal}. Press enter to continue or X to exit"
 
