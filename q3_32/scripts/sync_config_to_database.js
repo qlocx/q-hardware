@@ -59,7 +59,9 @@ const sendToAPI = async () => {
         console.log(`Qlocx sync: status ${result.status}, ${result.statusText}, ${jsonResult.message}`)
     } else {
         await sleep(1000)
-        console.log(e.execSync("nrfjprog --reset").toString())
+        try {
+            console.log(e.execSync("nrfjprog --reset").toString())
+        } catch { }
         console.log("\n===== Stoppa nu i batteriet i kretskortet =====")
 	console.log(`\n===== Kretskortet har fått ID: ${config.public_key.substring(0,8)} ===\n`)
     }
