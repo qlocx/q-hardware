@@ -3,15 +3,11 @@
 
 RED='\033[1;91m'
 BLACK='\033[1;90m'
-WHITE_BG='\033[1;47m'
 NOCOLOR='\033[0m'
-
-# white bg with red text
-echo -e "${WHITE_BG}${RED}This is a test${NOCOLOR}"
 
 # write with asci formatting
 
-echo -e "${BLACK}${WHITE_BG}"
+echo -e "${BLACK}"
 echo "  _____                                               _               _                         _   ";
 echo " |  __ \                                             (_)             | |                       | |_ ";
 echo " | |__) | __ ___   __ _ _ __ __ _ _ __ ___  _ __ ___  _ _ __   __ _  | |__   ___   __ _ _ __ __| (_)";
@@ -21,12 +17,12 @@ echo " |_|   |_|  \___/ \__, |_|  \__,_|_| |_| |_|_| |_| |_|_|_| |_|\__, | |_.__
 echo "                   __/ |                                       __/ |                                ";
 echo "                  |___/                                       |___/                                 ";
 
-echo -e "${WHITE_BG}"
-echo -e "${WHITE_BG}"
-echo -e "${WHITE_BG}"
-echo -e "${WHITE_BG}"
+echo -e ""
+echo -e ""
+echo -e ""
+echo -e ""
 
-echo -e "${RED}${WHITE_BG}"
+echo -e "${RED}"
 echo "                                 ____        __ ";
 echo "                                / __ \      /_ |";
 echo "                               | |  | |      | |";
@@ -35,10 +31,10 @@ echo "                               | |__| |      | |";
 echo "                                \___\_\      |_|";
 
 
-echo -e "${BLACK}${WHITE_BG}"
-echo -e "${WHITE_BG}"
-echo -e "${WHITE_BG}"
-echo -e "${WHITE_BG}"
+echo -e "${BLACK}"
+echo -e ""
+echo -e ""
+echo -e ""
 
 echo "  _____                                _              _                          _   _                                __   __  _                    _ _   ";
 echo " |  __ \                              | |            | |                        | | (_)                               \ \ / / | |                  (_) |  ";
