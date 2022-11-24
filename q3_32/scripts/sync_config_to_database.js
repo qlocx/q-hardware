@@ -13,8 +13,8 @@ fs.writeFileSync(`${__dirname}/bleid.txt`, bleid)
 
 try {
     fs.writeFileSync(`/home/robert/Qlocx/qtestserver/controller.json`, JSON.stringify(config))
-    const printerName = execSync('lpstat -a | cut -f1 -d \' \'').toString().replace('\n', '')
-    console.log(execSync(`lp -d ${printerName} ../build/bleid.txt -o landscape -o page-top=15 -o media=Custom.12x22mm`).toString())
+    const printerName = e.execSync('lpstat -a | cut -f1 -d \' \'').toString().replace('\n', '')
+    console.log(e.execSync(`lp -d ${printerName} ../build/bleid.txt -o landscape -o page-top=15 -o media=Custom.12x22mm`).toString())
 } catch (e) {
     // console.log(e)
 }
