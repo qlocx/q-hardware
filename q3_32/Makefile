@@ -79,9 +79,9 @@ $(OUTPUT_DIRECTORY)/config.hex: scripts/config_to_hex.js $(OUTPUT_DIRECTORY)/con
 # CONFIG (JSON) #
 #################
 
-upload_config: $(OUTPUT_DIRECTORY)/config.json scripts/sync_config_to_database.js
-	gcc -E -P - < scripts/sync_config_to_database.js > $(OUTPUT_DIRECTORY)/sync_config_to_database.js
-	node $(OUTPUT_DIRECTORY)/sync_config_to_database.js
+# upload_config: $(OUTPUT_DIRECTORY)/config.json scripts/sync_config_to_database.js
+# 	gcc -E -P - < scripts/sync_config_to_database.js > $(OUTPUT_DIRECTORY)/sync_config_to_database.js
+# 	node $(OUTPUT_DIRECTORY)/sync_config_to_database.js
 
 
 $(OUTPUT_DIRECTORY)/config.json: scripts/create_json_config.js node_modules
