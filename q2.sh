@@ -1,7 +1,7 @@
 git reset --hard HEAD
 git pull
 
-echo "You are starting to program board Q2. Press enter to continue or X to exit"
+echo "You are starting to program board ${bold}Q2${normal}. Press enter to continue or X to exit"
 
 read -n 1 -s key
 
