@@ -3,7 +3,7 @@ SDK_ROOT=nRF5_SDK_15.0.0_a53641a
 BOOTLOADER_DIRECTORY=bootloader
 APPLICATION_DIRECTORY=app
 
-flash: erase flash_softdevice flash_bootloader flash_application flash_config flash_bootloader_setting reset upload_config protect_from_readback
+flash: erase flash_softdevice flash_bootloader flash_application flash_config flash_bootloader_setting reset protect_from_readback
 
 m: erase flash_softdevice flash_bootloader flash_application flash_config flash_bootloader_setting reset upload_config
 
