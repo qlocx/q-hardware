@@ -4,8 +4,8 @@ Qlocx has 5 different hardware types:
 
 1. Q1 (BT)
 2. Q2 (BT)
-3. Q3 (BT)
-4. Q4 (BT)
+3. Q3-16 (BT)
+4. Q3-32 (BT)
 5. Qiot-1 (IOT)
 
 Each folder in the project corresponds to a certain hardware type
