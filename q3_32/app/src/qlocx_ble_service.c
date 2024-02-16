@@ -32,8 +32,8 @@ static void qlocx_ble_terminate_connection(qlocx_ble_t* ctx)
   NRF_LOG_INFO("Terminating connection.\n");
 
   uint32_t err_code = sd_ble_gap_disconnect(
-      ctx->conn_handle,
-      BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+    ctx->conn_handle,
+    BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
 
   APP_ERROR_CHECK(err_code);
 
@@ -42,13 +42,13 @@ static void qlocx_ble_terminate_connection(qlocx_ble_t* ctx)
 /**
  * This callback is called if the remote has timed out.
  */
-static void qlocx_ble_termination_timer_handler(void *context)
+static void qlocx_ble_termination_timer_handler(void* context)
 {
   NRF_LOG_INFO("Remote timed out.\n");
-  qlocx_ble_terminate_connection((qlocx_ble_t*) context);
+  qlocx_ble_terminate_connection((qlocx_ble_t*)context);
 }
 
-static void qlocx_ble_flush_tx_buffer(qlocx_ble_t *ctx)
+static void qlocx_ble_flush_tx_buffer(qlocx_ble_t* ctx)
 {
   uint32_t err_code;
 
@@ -84,6 +84,21 @@ static void qlocx_ble_flush_tx_buffer(qlocx_ble_t *ctx)
 
 }
 
+static int qlocx_data_is_eot(qlocx_ble_t* context, const uint8_t* data, size_t data_length) {
+  if (data_length == 0) return 1;
+
+  if (data_length == 2
+    &&
+    context->rx_buffer[context->rx_length - 1] == 0xef &&
+    context->rx_buffer[context->rx_length - 2] == 0xbe
+    ) {
+    context->rx_length = context->rx_length - 2;
+    return 1;
+  }
+
+  return 0;
+}
+
 static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_length) {
 
   NRF_LOG_INFO("Remote timeout in thirty seconds.");
@@ -102,7 +117,7 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
   context->rx_length += data_length;
 
   // if the packet wasn't empty, we expect another one
-  if (data_length) return;
+  if (qlocx_data_is_eot(context, data, data_length) == 0) return;
 
   if (!context->encryption_configured) {
 
@@ -130,14 +145,14 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
     context->tx_length = sizeof(context->session_key);
 
     // encrypt the session key with the public key of the remote
-    uint8_t private_key[QLOCX_CONFIG_PRIVATE_KEY_SIZE] = {0};
+    uint8_t private_key[QLOCX_CONFIG_PRIVATE_KEY_SIZE] = { 0 };
     qlocx_config_get_private_key(private_key);
     NRF_LOG_INFO("Encrypting session key.\n");
     context->tx_length = qlocx_crypto_encrypt_asymmetric_in_place(
-        context->tx_buffer,
-        context->tx_length,
-        context->remote_public_key,
-        private_key);
+      context->tx_buffer,
+      context->tx_length,
+      context->remote_public_key,
+      private_key);
 
     // terminate request if encryption failed
     if (!context->tx_length) {
@@ -151,8 +166,9 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
 
     // send response
     qlocx_ble_flush_tx_buffer(context);
-    
-  } else {
+
+  }
+  else {
 
     // terminate connection if rx buffer is too short
     if (context->rx_length < 72) {
@@ -174,14 +190,14 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
       return;
     }
 
-    uint8_t private_key[QLOCX_CONFIG_PRIVATE_KEY_SIZE] = {0};
+    uint8_t private_key[QLOCX_CONFIG_PRIVATE_KEY_SIZE] = { 0 };
     qlocx_config_get_private_key(private_key);
     // verify hash
     bool success = qlocx_crypto_verify_hmacsha256(
-        context->rx_buffer + QLOCX_CRYPTO_HMACSHA256_HASH_SIZE,
-        context->rx_length - QLOCX_CRYPTO_HMACSHA256_HASH_SIZE,
-        context->rx_buffer,
-        private_key);
+      context->rx_buffer + QLOCX_CRYPTO_HMACSHA256_HASH_SIZE,
+      context->rx_length - QLOCX_CRYPTO_HMACSHA256_HASH_SIZE,
+      context->rx_buffer,
+      private_key);
 
     // terminate connection if hash is invalid
     if (!success) {
@@ -191,7 +207,7 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
     }
 
     // save the hash in a temporary buffer
-    uint8_t hash[QLOCX_CRYPTO_HMACSHA256_HASH_SIZE] = {0};
+    uint8_t hash[QLOCX_CRYPTO_HMACSHA256_HASH_SIZE] = { 0 };
     memcpy(hash, context->rx_buffer, sizeof(hash));
     memmove(context->rx_buffer, context->rx_buffer + sizeof(hash), context->rx_length - sizeof(hash));
     context->rx_length -= sizeof(hash);
@@ -199,42 +215,42 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
     // handle request
     switch (context->rx_buffer[0]) {
 #ifdef QLOCX_POWER_METER_ENABLED
-      case QLOCX_API_GET_BATTERY_STATUS:
-        success = qlocx_api_get_battery_status(context);
-        break;
+    case QLOCX_API_GET_BATTERY_STATUS:
+      success = qlocx_api_get_battery_status(context);
+      break;
 #endif
-      case QLOCX_API_OPEN_PORT:
-        success = qlocx_api_open_port(context);
-        break;
-      case QLOCX_API_GET_PORT_STATUS:
-        success = qlocx_api_get_port_status(context);
-        break;
-      case QLOCX_API_SET_SENSE_CONFIG:
-        success = qlocx_api_set_sense_config(context);
-        break;
-      case QLOCX_API_PURGE_LOGS_UNTIL_DATE:
-        success = qlocx_api_purge_logs_until_date(context);
-        break;
-      case QLOCX_API_PURGE_LOGS_UNTIL_HASH:
-        success = qlocx_api_purge_logs_until_hash(context);
-        break;
-      case QLOCX_API_GET_LOGS:
-        success = qlocx_api_get_logs(context);
-        break;
-      case QLOCX_API_GET_SOFTWARE_VERSION:
-        success = qlocx_api_get_software_version(context);
-        break;
+    case QLOCX_API_OPEN_PORT:
+      success = qlocx_api_open_port(context);
+      break;
+    case QLOCX_API_GET_PORT_STATUS:
+      success = qlocx_api_get_port_status(context);
+      break;
+    case QLOCX_API_SET_SENSE_CONFIG:
+      success = qlocx_api_set_sense_config(context);
+      break;
+    case QLOCX_API_PURGE_LOGS_UNTIL_DATE:
+      success = qlocx_api_purge_logs_until_date(context);
+      break;
+    case QLOCX_API_PURGE_LOGS_UNTIL_HASH:
+      success = qlocx_api_purge_logs_until_hash(context);
+      break;
+    case QLOCX_API_GET_LOGS:
+      success = qlocx_api_get_logs(context);
+      break;
+    case QLOCX_API_GET_SOFTWARE_VERSION:
+      success = qlocx_api_get_software_version(context);
+      break;
 #ifdef QLOCX_RTC_ENABLED
-      case QLOCX_API_GET_DATE:
-        success = qlocx_api_get_date(context);
-        break;
+    case QLOCX_API_GET_DATE:
+      success = qlocx_api_get_date(context);
+      break;
 #endif
-      case QLOCX_API_GET_ALL_DOOR_STATUS:
-        success = qlocx_api_get_door_status(context);
-	break;		  
-      default:
-        success = false;
-        break;
+    case QLOCX_API_GET_ALL_DOOR_STATUS:
+      success = qlocx_api_get_door_status(context);
+      break;
+    default:
+      success = false;
+      break;
     }
 
     if (!success) {
@@ -252,7 +268,7 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
 
     // copy hash onto the tx_buffer
     memcpy(context->tx_buffer, hash,
-        QLOCX_CRYPTO_HMACSHA256_HASH_SIZE);
+      QLOCX_CRYPTO_HMACSHA256_HASH_SIZE);
 
     // empty rx buffer
     context->rx_length = 0;
@@ -291,26 +307,26 @@ static void qlocx_ble_on_connect(qlocx_ble_t* ctx, ble_evt_t const* p_ble_evt)
   ble_nus_client_context_t* p_client = NULL;
 
   err_code = blcm_link_ctx_get(ctx->p_link_ctx_storage,
-      p_ble_evt->evt.gap_evt.conn_handle,
-      (void*) &p_client);
+    p_ble_evt->evt.gap_evt.conn_handle,
+    (void*)&p_client);
   if (err_code != NRF_SUCCESS)
   {
     NRF_LOG_ERROR("Link context for 0x%02X connection handle could not be fetched.",
-        p_ble_evt->evt.gap_evt.conn_handle);
+      p_ble_evt->evt.gap_evt.conn_handle);
   }
 
   /* Check the hosts CCCD value to inform of readiness to send data using the RX characteristic */
   memset(&gatts_val, 0, sizeof(ble_gatts_value_t));
   gatts_val.p_value = cccd_value;
-  gatts_val.len     = sizeof(cccd_value);
-  gatts_val.offset  = 0;
+  gatts_val.len = sizeof(cccd_value);
+  gatts_val.offset = 0;
 
   err_code = sd_ble_gatts_value_get(p_ble_evt->evt.gap_evt.conn_handle,
-      ctx->rx_handles.cccd_handle,
-      &gatts_val);
+    ctx->rx_handles.cccd_handle,
+    &gatts_val);
 
-  if ((err_code == NRF_SUCCESS)     &&
-      ble_srv_is_notification_enabled(gatts_val.p_value))
+  if ((err_code == NRF_SUCCESS) &&
+    ble_srv_is_notification_enabled(gatts_val.p_value))
   {
     if (p_client != NULL)
     {
@@ -318,10 +334,10 @@ static void qlocx_ble_on_connect(qlocx_ble_t* ctx, ble_evt_t const* p_ble_evt)
     }
 
     memset(&evt, 0, sizeof(qlocx_ble_evt_t));
-    evt.type        = QLOCX_BLE_EVT_COMM_STARTED;
-    evt.p_nus       = ctx;
+    evt.type = QLOCX_BLE_EVT_COMM_STARTED;
+    evt.p_nus = ctx;
     evt.conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
-    evt.p_link_ctx  = p_client;
+    evt.p_link_ctx = p_client;
 
   }
 
@@ -339,7 +355,7 @@ static void qlocx_ble_on_connect(qlocx_ble_t* ctx, ble_evt_t const* p_ble_evt)
 /**
  * Callback for when a connection is terminated.
  */
-static void qlocx_ble_on_disconnect(qlocx_ble_t *context, const ble_evt_t* event)
+static void qlocx_ble_on_disconnect(qlocx_ble_t* context, const ble_evt_t* event)
 {
   NRF_LOG_INFO("Disconnected.\n");
   context->conn_handle = BLE_CONN_HANDLE_INVALID;
@@ -355,45 +371,45 @@ static void qlocx_ble_on_write(qlocx_ble_t* ctx, ble_evt_t const* p_ble_evt)
 {
   ret_code_t                    err_code;
   qlocx_ble_evt_t               evt;
-  ble_nus_client_context_t*     p_client;
-  ble_gatts_evt_write_t const*   p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
+  ble_nus_client_context_t* p_client;
+  ble_gatts_evt_write_t const* p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
 
   err_code = blcm_link_ctx_get(ctx->p_link_ctx_storage,
-      p_ble_evt->evt.gatts_evt.conn_handle,
-      (void*) &p_client);
+    p_ble_evt->evt.gatts_evt.conn_handle,
+    (void*)&p_client);
   if (err_code != NRF_SUCCESS)
   {
     NRF_LOG_ERROR("Link context for 0x%02X connection handle could not be fetched.",
-        p_ble_evt->evt.gatts_evt.conn_handle);
+      p_ble_evt->evt.gatts_evt.conn_handle);
   }
 
   memset(&evt, 0, sizeof(qlocx_ble_evt_t));
-  evt.p_nus       = ctx;
+  evt.p_nus = ctx;
   evt.conn_handle = p_ble_evt->evt.gatts_evt.conn_handle;
-  evt.p_link_ctx  = p_client;
+  evt.p_link_ctx = p_client;
 
   // change of notification settings
   if ((p_evt_write->handle == ctx->tx_handles.cccd_handle) &&
-      (p_evt_write->len == 2))
+    (p_evt_write->len == 2))
   {
     if (p_client != NULL)
     {
       if (ble_srv_is_notification_enabled(p_evt_write->data))
       {
         p_client->is_notification_enabled = true;
-        evt.type                          = QLOCX_BLE_EVT_COMM_STARTED;
+        evt.type = QLOCX_BLE_EVT_COMM_STARTED;
       }
       else
       {
         p_client->is_notification_enabled = false;
-        evt.type                          = QLOCX_BLE_EVT_COMM_STOPPED;
+        evt.type = QLOCX_BLE_EVT_COMM_STOPPED;
       }
     }
   }
   // normal write to the rx handle
   else if (p_evt_write->handle == ctx->rx_handles.value_handle)
   {
-    evt.type                  = QLOCX_BLE_EVT_RX_DATA;
+    evt.type = QLOCX_BLE_EVT_RX_DATA;
     evt.params.rx_data.p_data = p_evt_write->data;
     evt.params.rx_data.length = p_evt_write->len;
 
@@ -417,22 +433,22 @@ static void qlocx_ble_on_hvx_tx_complete(qlocx_ble_t* ctx, ble_evt_t const* p_bl
   ble_nus_client_context_t* p_client;
 
   err_code = blcm_link_ctx_get(ctx->p_link_ctx_storage,
-      p_ble_evt->evt.gatts_evt.conn_handle,
-      (void*) &p_client);
+    p_ble_evt->evt.gatts_evt.conn_handle,
+    (void*)&p_client);
   if (err_code != NRF_SUCCESS)
   {
     NRF_LOG_ERROR("Link context for 0x%02X connection handle could not be fetched.",
-        p_ble_evt->evt.gatts_evt.conn_handle);
+      p_ble_evt->evt.gatts_evt.conn_handle);
     return;
   }
 
   if (p_client->is_notification_enabled)
   {
     memset(&evt, 0, sizeof(qlocx_ble_evt_t));
-    evt.type        = QLOCX_BLE_EVT_TX_RDY;
-    evt.p_nus       = ctx;
+    evt.type = QLOCX_BLE_EVT_TX_RDY;
+    evt.p_nus = ctx;
     evt.conn_handle = p_ble_evt->evt.gatts_evt.conn_handle;
-    evt.p_link_ctx  = p_client;
+    evt.p_link_ctx = p_client;
 
   }
 }
@@ -463,11 +479,11 @@ static uint32_t qlocx_ble_tx_char_add(qlocx_ble_t* ctx, qlocx_ble_init_t const* 
   memset(&char_md, 0, sizeof(char_md));
 
   char_md.char_props.notify = 1;
-  char_md.p_char_user_desc  = NULL;
-  char_md.p_char_pf         = NULL;
-  char_md.p_user_desc_md    = NULL;
-  char_md.p_cccd_md         = &cccd_md;
-  char_md.p_sccd_md         = NULL;
+  char_md.p_char_user_desc = NULL;
+  char_md.p_char_pf = NULL;
+  char_md.p_user_desc_md = NULL;
+  char_md.p_cccd_md = &cccd_md;
+  char_md.p_sccd_md = NULL;
 
   ble_uuid.type = ctx->uuid_type;
   ble_uuid.uuid = QLOCX_BLE_SERVICE_TX_CHARACTERISTIC_UUID;
@@ -477,23 +493,23 @@ static uint32_t qlocx_ble_tx_char_add(qlocx_ble_t* ctx, qlocx_ble_init_t const* 
   BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.read_perm);
   BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.write_perm);
 
-  attr_md.vloc    = BLE_GATTS_VLOC_STACK;
+  attr_md.vloc = BLE_GATTS_VLOC_STACK;
   attr_md.rd_auth = 0;
   attr_md.wr_auth = 0;
-  attr_md.vlen    = 1;
+  attr_md.vlen = 1;
 
   memset(&attr_char_value, 0, sizeof(attr_char_value));
 
-  attr_char_value.p_uuid    = &ble_uuid;
+  attr_char_value.p_uuid = &ble_uuid;
   attr_char_value.p_attr_md = &attr_md;
-  attr_char_value.init_len  = sizeof(uint8_t);
+  attr_char_value.init_len = sizeof(uint8_t);
   attr_char_value.init_offs = 0;
-  attr_char_value.max_len   = QLOCX_BLE_MAX_DATA_LEN;
+  attr_char_value.max_len = QLOCX_BLE_MAX_DATA_LEN;
 
   return sd_ble_gatts_characteristic_add(ctx->service_handle,
-      &char_md,
-      &attr_char_value,
-      &ctx->tx_handles);
+    &char_md,
+    &attr_char_value,
+    &ctx->tx_handles);
 }
 
 
@@ -513,13 +529,13 @@ static uint32_t qlocx_ble_rx_char_add(qlocx_ble_t* ctx, const qlocx_ble_init_t* 
 
   memset(&char_md, 0, sizeof(char_md));
 
-  char_md.char_props.write         = 1;
+  char_md.char_props.write = 1;
   char_md.char_props.write_wo_resp = 1;
-  char_md.p_char_user_desc         = NULL;
-  char_md.p_char_pf                = NULL;
-  char_md.p_user_desc_md           = NULL;
-  char_md.p_cccd_md                = NULL;
-  char_md.p_sccd_md                = NULL;
+  char_md.p_char_user_desc = NULL;
+  char_md.p_char_pf = NULL;
+  char_md.p_user_desc_md = NULL;
+  char_md.p_cccd_md = NULL;
+  char_md.p_sccd_md = NULL;
 
   ble_uuid.type = ctx->uuid_type;
   ble_uuid.uuid = QLOCX_BLE_SERVICE_RX_CHARACTERISTIC_UUID;
@@ -529,23 +545,23 @@ static uint32_t qlocx_ble_rx_char_add(qlocx_ble_t* ctx, const qlocx_ble_init_t* 
   BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.read_perm);
   BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.write_perm);
 
-  attr_md.vloc    = BLE_GATTS_VLOC_STACK;
+  attr_md.vloc = BLE_GATTS_VLOC_STACK;
   attr_md.rd_auth = 0;
   attr_md.wr_auth = 0;
-  attr_md.vlen    = 1;
+  attr_md.vlen = 1;
 
   memset(&attr_char_value, 0, sizeof(attr_char_value));
 
-  attr_char_value.p_uuid    = &ble_uuid;
+  attr_char_value.p_uuid = &ble_uuid;
   attr_char_value.p_attr_md = &attr_md;
-  attr_char_value.init_len  = 1;
+  attr_char_value.init_len = 1;
   attr_char_value.init_offs = 0;
-  attr_char_value.max_len   = QLOCX_BLE_MAX_DATA_LEN;
+  attr_char_value.max_len = QLOCX_BLE_MAX_DATA_LEN;
 
   return sd_ble_gatts_characteristic_add(ctx->service_handle,
-      &char_md,
-      &attr_char_value,
-      &ctx->rx_handles);
+    &char_md,
+    &attr_char_value,
+    &ctx->rx_handles);
 }
 
 
@@ -556,30 +572,30 @@ void qlocx_ble_on_ble_evt(ble_evt_t const* p_ble_evt, void* p_context)
     return;
   }
 
-  qlocx_ble_t* ctx = (qlocx_ble_t*) p_context;
+  qlocx_ble_t* ctx = (qlocx_ble_t*)p_context;
 
   switch (p_ble_evt->header.evt_id)
   {
-    case BLE_GAP_EVT_CONNECTED:
-      qlocx_ble_on_connect(ctx, p_ble_evt);
-      break;
+  case BLE_GAP_EVT_CONNECTED:
+    qlocx_ble_on_connect(ctx, p_ble_evt);
+    break;
 
-    case BLE_GAP_EVT_DISCONNECTED:
-      qlocx_ble_on_disconnect(ctx, p_ble_evt);
-      break;
+  case BLE_GAP_EVT_DISCONNECTED:
+    qlocx_ble_on_disconnect(ctx, p_ble_evt);
+    break;
 
-    case BLE_GATTS_EVT_WRITE:
-      qlocx_ble_on_write(ctx, p_ble_evt);
-      break;
+  case BLE_GATTS_EVT_WRITE:
+    qlocx_ble_on_write(ctx, p_ble_evt);
+    break;
 
-    case BLE_GATTS_EVT_HVN_TX_COMPLETE:
-      qlocx_ble_flush_tx_buffer(ctx);
-      qlocx_ble_on_hvx_tx_complete(ctx, p_ble_evt);
-      break;
+  case BLE_GATTS_EVT_HVN_TX_COMPLETE:
+    qlocx_ble_flush_tx_buffer(ctx);
+    qlocx_ble_on_hvx_tx_complete(ctx, p_ble_evt);
+    break;
 
-    default:
-      // No implementation needed.
-      break;
+  default:
+    // No implementation needed.
+    break;
   }
 }
 
@@ -604,8 +620,8 @@ uint32_t qlocx_ble_init(qlocx_ble_t* ctx, qlocx_ble_init_t const* p_nus_init)
 
   // Add the service.
   err_code = sd_ble_gatts_service_add(BLE_GATTS_SRVC_TYPE_PRIMARY,
-      &ble_uuid,
-      &ctx->service_handle);
+    &ble_uuid,
+    &ctx->service_handle);
   /**@snippet [Adding proprietary Service to the SoftDevice] */
   APP_ERROR_CHECK(err_code);
 
@@ -622,16 +638,16 @@ uint32_t qlocx_ble_init(qlocx_ble_t* ctx, qlocx_ble_init_t const* p_nus_init)
 
 
 uint32_t qlocx_ble_data_send(qlocx_ble_t* ctx,
-    uint8_t* p_data,
-    uint16_t p_length)
+  uint8_t* p_data,
+  uint16_t p_length)
 {
   ret_code_t                 err_code;
   ble_gatts_hvx_params_t     hvx_params;
-  ble_nus_client_context_t*  p_client;
+  ble_nus_client_context_t* p_client;
 
   VERIFY_PARAM_NOT_NULL(ctx);
 
-  err_code = blcm_link_ctx_get(ctx->p_link_ctx_storage, ctx->conn_handle, (void*) &p_client);
+  err_code = blcm_link_ctx_get(ctx->p_link_ctx_storage, ctx->conn_handle, (void*)&p_client);
   VERIFY_SUCCESS(err_code);
 
   if ((ctx->conn_handle == BLE_CONN_HANDLE_INVALID) || (p_client == NULL))
@@ -653,8 +669,8 @@ uint32_t qlocx_ble_data_send(qlocx_ble_t* ctx,
 
   hvx_params.handle = ctx->tx_handles.value_handle;
   hvx_params.p_data = p_data;
-  hvx_params.p_len  = &p_length;
-  hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
+  hvx_params.p_len = &p_length;
+  hvx_params.type = BLE_GATT_HVX_NOTIFICATION;
 
   return sd_ble_gatts_hvx(ctx->conn_handle, &hvx_params);
 }

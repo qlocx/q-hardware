@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "qlocx_power_meter.h": "c",
+        "qlocx_ports.h": "c"
+    }
+}

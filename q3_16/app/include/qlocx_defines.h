@@ -12,7 +12,7 @@
 /* GLOBAL */
 
 #define QLOCX_BOARD_Q3
-#define QLOCX_SOFTWARE_VERSION 3
+#define QLOCX_SOFTWARE_VERSION 6
 
 /* CONFIG */
 
