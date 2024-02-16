@@ -1,0 +1,148 @@
+diff --git a/q3_16/app/config/sdk_config.h b/q3_16/app/config/sdk_config.h
+index 8fbdac93..a10df4df 100644
+--- a/q3_16/app/config/sdk_config.h
++++ b/q3_16/app/config/sdk_config.h
+@@ -708,7 +708,7 @@
+ // <4=> Debug 
+ 
+ #ifndef NRFX_UART_CONFIG_LOG_LEVEL
+-#define NRFX_UART_CONFIG_LOG_LEVEL 3
++#define NRFX_UART_CONFIG_LOG_LEVEL 4
+ #endif
+ 
+ // <o> NRFX_UART_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+@@ -1376,7 +1376,7 @@
+ // <e> NRF_LOG_BACKEND_UART_ENABLED - nrf_log_backend_uart - Log UART backend
+ //==========================================================
+ #ifndef NRF_LOG_BACKEND_UART_ENABLED
+-#define NRF_LOG_BACKEND_UART_ENABLED 0
++#define NRF_LOG_BACKEND_UART_ENABLED 1
+ #endif
+ // <o> NRF_LOG_BACKEND_UART_TX_PIN - UART TX pin 
+ #ifndef NRF_LOG_BACKEND_UART_TX_PIN
+@@ -1506,7 +1506,7 @@
+ // <i> Log data is buffered and can be processed in idle.
+ 
+ #ifndef NRF_LOG_DEFERRED
+-#define NRF_LOG_DEFERRED 0
++#define NRF_LOG_DEFERRED 1
+ #endif
+ 
+ // <o> NRF_LOG_BUFSIZE  - Size of the buffer for storing logs (in bytes).
+diff --git a/q3_16/app/include/qlocx_defines.h b/q3_16/app/include/qlocx_defines.h
+index 3ca1dacd..afcedbee 100644
+--- a/q3_16/app/include/qlocx_defines.h
++++ b/q3_16/app/include/qlocx_defines.h
+@@ -12,7 +12,7 @@
+ /* GLOBAL */
+ 
+ #define QLOCX_BOARD_Q3
+-#define QLOCX_SOFTWARE_VERSION 3
++#define QLOCX_SOFTWARE_VERSION 6
+ 
+ /* CONFIG */
+ 
+diff --git a/q3_16/app/src/qlocx_ble_service.c b/q3_16/app/src/qlocx_ble_service.c
+index ab9646c6..0cfe0601 100644
+--- a/q3_16/app/src/qlocx_ble_service.c
++++ b/q3_16/app/src/qlocx_ble_service.c
+@@ -26,7 +26,7 @@ static void qlocx_ble_terminate_connection(qlocx_ble_t* ctx)
+ 
+   app_timer_stop(qlocx_ble_termination_timer);
+ 
+-  app_timer_stop(ble_service_timer);
++  // app_timer_stop(ble_service_timer);
+   /**
+    * If conn_handle is invalid, we have already disconnected.
+    */
+@@ -88,11 +88,26 @@ static void qlocx_ble_flush_tx_buffer(qlocx_ble_t* ctx)
+ 
+ }
+ 
++static int qlocx_data_is_eot(qlocx_ble_t* context, const uint8_t* data, size_t data_length) {
++  if (data_length == 0) return 1;
++
++  if (data_length == 2
++    &&
++    context->rx_buffer[context->rx_length - 1] == 0xef &&
++    context->rx_buffer[context->rx_length - 2] == 0xbe
++    ) {
++    context->rx_length = context->rx_length - 2;
++    return 1;
++  }
++
++  return 0;
++}
++
+ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_length) {
+ 
+   app_timer_stop(qlocx_ble_termination_timer);
+   app_timer_start(qlocx_ble_termination_timer, APP_TIMER_TICKS(30000), context);
+-  app_timer_start(ble_service_timer, 5 * 32768, NULL);
++  // app_timer_start(ble_service_timer, 5 * 32768, NULL);
+ 
+   // terminate connection if the user sends too much data
+   if (context->rx_length + data_length > sizeof(context->rx_buffer)) {
+@@ -105,8 +120,8 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
+   memcpy(context->rx_buffer + context->rx_length, data, data_length);
+   context->rx_length += data_length;
+ 
+-  // if the packet wasn't empty, we expect another one
+-  if (data_length) return;
++  // if this wasn't EOT then wait for the next packet
++  if (qlocx_data_is_eot(context, data, data_length) == 0) return;
+ 
+   if (!context->encryption_configured) {
+ 
+@@ -246,7 +261,7 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
+     }
+ 
+     // add the hash to the log
+-    qlocx_log_add_entry(hash);
++    // qlocx_log_add_entry(hash);
+ 
+     // make place for hash in tx_buffer
+     memmove(context->tx_buffer + QLOCX_CRYPTO_HMACSHA256_HASH_SIZE, context->tx_buffer, context->tx_length);
+diff --git a/q3_16/app/src/qlocx_main.c b/q3_16/app/src/qlocx_main.c
+index b779cc88..496d2efb 100644
+--- a/q3_16/app/src/qlocx_main.c
++++ b/q3_16/app/src/qlocx_main.c
+@@ -12,6 +12,10 @@
+ #include "nrf_svci_async_function.h"
+ #include "nrf_svci_async_handler.h"
+ 
++#include "nrfx_log.h"
++#include "nrf_uarte.h"
++#include "nrf_uart.h"
++
+ #include "nrf_delay.h"
+ #include "nordic_common.h"
+ #include "nrf.h"
+@@ -733,6 +737,7 @@ int main(void)
+   qlocx_main_app_timers_start();
+   qlocx_main_advertising_start(erase_bonds);
+ 
++
+   // Enter main loop.
+   for (;;)
+   {
+diff --git a/q3_16/app/src/qlocx_ports.c b/q3_16/app/src/qlocx_ports.c
+index ee35a9fe..db98c6a4 100644
+--- a/q3_16/app/src/qlocx_ports.c
++++ b/q3_16/app/src/qlocx_ports.c
+@@ -89,6 +89,7 @@ void qlocx_ports_init()
+   /* Initialize gpiote */
+   nrf_drv_gpiote_init();
+ 
++
+   /* Initialize the timers */
+   for (size_t i = 0; i < sizeof(qlocx_ports) / sizeof(qlocx_port_t); i++)
+   {
+@@ -115,7 +116,6 @@ void qlocx_ports_init()
+       nrf_drv_gpiote_in_event_enable(qlocx_ports[i].gpio, true);
+     }
+   }
+-
+ }
+ 
+ /**
