@@ -67,7 +67,7 @@ else
     exit 1
 fi
 
-body="{\"endpoint\":\"$deviceId\"}"
+body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\"}"
 
 status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$URL")
 
