@@ -2,9 +2,13 @@
 
 echo "Start programming IoT card with 32 ports..."
 
-# TODO: RUN HEX SCRIPT!
+program_result=$(nrfjprog --program ./build/zephyr/merged.hex --verify 2>&1 | grep "ERROR")
 
-# IF SCRIPT FAILS, EXIT WITH SOUND
+if echo "$program_result" | grep "ERROR"; then
+    echo "Error detected. Exiting script."
+    afplay ./fail.mp3
+    exit 1
+fi
 
 echo "Reading RAM to get device id..."
 nrfjprog --readram ram.hex
@@ -43,7 +47,8 @@ done <<< "$memory_match"
 echo "Device id: $deviceId"
 
 if [ -z "$deviceId" ]; then
-    # Play an exit sound using afplay (adjust the sound file path accordingly)
+    echo "Device id empty"
+
     afplay ./fail.mp3
     exit 1
 fi
