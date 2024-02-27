@@ -58,21 +58,23 @@ echo "Device id: $deviceId"
 if [ -z "$deviceId" ]; then
     echo -e "\e[31mDevice id empty\e[0m"
 
+dotenv_file=".env"
+if [ -f "$dotenv_file" ]; then
+    export $(grep -v '^#' "$dotenv_file" | xargs)
+else
+    echo -e "\e[31mQlocx sync: status $status\e[0m"
     afplay ./fail.mp3
     exit 1
 fi
 
-URL="https://0rwvhut4cf.execute-api.eu-north-1.amazonaws.com/production/qiot"
-# TODO: read token from .env file!
-JWT="your_jwt_token"
 body="{\"endpoint\":\"$deviceId\"}"
 
-# Perform the POST request with curl
-status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT" -d "$body" "$URL")
+status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$URL")
 
 if [ "$status" -ne 200 ]; then
     echo -e "\e[31mQlocx sync: status $status\e[0m"
     afplay ./fail.mp3
+    exit 1
 else
     sleep 1
     echo "$(nrfjprog --reset)"
