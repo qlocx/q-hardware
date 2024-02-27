@@ -76,16 +76,3 @@ else
     echo -e "\n===== Device registration sucessful ====="
     afplay ./success.mp3
 fi
-
-# # Check the status code
-# status=$(echo "$response" | jq -r '.status')
-# message=$(echo "$jsonResult" | jq -r '.message')
-
-# if [ "$status" -ne 200 ]; then
-#     echo "Qlocx sync: status $status, $message"
-# else
-#     sleep 1
-#     echo "$(nrfjprog --reset)"
-#     echo -e "\n===== Stoppa nu i batteriet i kretskortet ====="
-#     echo -e "\n===== Kretskortet har fått ID: ${config.public_key:0:8} ===\n"
-# fi
