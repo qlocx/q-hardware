@@ -2,13 +2,13 @@
 
 echo "Start programming IoT card with 32 ports..."
 
-program_result=$(nrfjprog --program ./build/zephyr/merged.hex --verify 2>&1 | grep "ERROR")
+# program_result=$(nrfjprog --program ./build/zephyr/merged.hex --verify 2>&1 | grep "ERROR")
 
-if echo "$program_result" | grep "ERROR"; then
-    echo "Error detected. Exiting script."
-    afplay ./fail.mp3
-    exit 1
-fi
+# if echo "$program_result" | grep "ERROR"; then
+#     echo "Error detected. Exiting script."
+#     afplay ./fail.mp3
+#     exit 1
+# fi
 
 echo "Reading RAM to get device id..."
 program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
