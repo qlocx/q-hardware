@@ -5,3 +5,4 @@ package-lock.json
 bleid.txt
 log.log
 ram.hex
+.env
