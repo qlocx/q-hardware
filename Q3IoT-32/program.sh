@@ -11,7 +11,13 @@ if echo "$program_result" | grep "ERROR"; then
 fi
 
 echo "Reading RAM to get device id..."
-nrfjprog --readram ram.hex
+program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
+
+if echo "$program_result" | grep "ERROR"; then
+    echo "Error detected. Exiting script."
+    afplay ./fail.mp3
+    exit 1
+fi
 
 memory_match=$(grep -A 1 "5133496F542D" ram.hex | head -n 2)
 
