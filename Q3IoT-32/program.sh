@@ -5,7 +5,8 @@ echo "Start programming IoT card with 32 ports..."
 # program_result=$(nrfjprog --program ./build/zephyr/merged.hex --verify 2>&1 | grep "ERROR")
 
 # if echo "$program_result" | grep "ERROR"; then
-#     echo "Error detected. Exiting script."
+#     echo -e "\e[31mError detected during flashing. Exiting script.\e[0m"
+
 #     afplay ./fail.mp3
 #     exit 1
 # fi
@@ -13,8 +14,10 @@ echo "Start programming IoT card with 32 ports..."
 echo "Reading RAM to get device id..."
 program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
 
+# TODO: MAYBE ADD SLEEP SO THAT ENDPOINT NAME CAN HAVE SOME TIME TO BE REASSIGNED MASED ON IMEI
+
 if echo "$program_result" | grep "ERROR"; then
-    echo "Error detected. Exiting script."
+    echo -e "\e[31mError detected when reading RAM. Exiting script.\e[0m"
     afplay ./fail.mp3
     exit 1
 fi
@@ -53,13 +56,13 @@ done <<< "$memory_match"
 echo "Device id: $deviceId"
 
 if [ -z "$deviceId" ]; then
-    echo "Device id empty"
+    echo -e "\e[31mDevice id empty\e[0m"
 
     afplay ./fail.mp3
     exit 1
 fi
 
-URL="https://webhook.site/1d1cb398-85ec-44fb-a604-c17489de62ce"
+URL="https://0rwvhut4cf.execute-api.eu-north-1.amazonaws.com/production/qiot"
 # TODO: read token from .env file!
 JWT="your_jwt_token"
 body="{\"endpoint\":\"$deviceId\"}"
@@ -68,11 +71,13 @@ body="{\"endpoint\":\"$deviceId\"}"
 status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT" -d "$body" "$URL")
 
 if [ "$status" -ne 200 ]; then
-    echo "Qlocx sync: status $status"
+    echo -e "\e[31mQlocx sync: status $status\e[0m"
     afplay ./fail.mp3
 else
     sleep 1
     echo "$(nrfjprog --reset)"
-    echo -e "\n===== Device registration sucessful ====="
+    echo -e "\n\e[32m===== Device registration successful =====\e[0m"
     afplay ./success.mp3
 fi
+
+exit 0
