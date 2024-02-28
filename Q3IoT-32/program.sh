@@ -124,8 +124,12 @@ while [ "$port_idx" -le 31 ]; do
     fi
 done
 
-# TODO: GET STATUS FOR ALL PORTS!! /26242/0/1
+signal_strength=$(curl "$TEST_SUITE_URL/clients/$deviceId/4/0/2?timeout=30&format=TLV")
+voltage=$(curl "$TEST_SUITE_URL/clients/$deviceId/3316/0/5700?timeout=30&format=TLV")
+all_ports_status=$(curl "$TEST_SUITE_URL/clients/$deviceId/26242/0/1?timeout=30&format=TLV")
 
+# TODO: FIRST CHECK IF WE ARE GETTING 200 FOR EACH REQUEST!!
+# TODO: READ AND PRINT CONTENT.VALUE OR WHATEVER SHOWS UP IN BODY RESPONE!
 
 COLOR_REST="$(tput sgr0)"
 COLOR_GREEN="$(tput setaf 2)"
