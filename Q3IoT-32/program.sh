@@ -69,10 +69,10 @@ fi
 
 body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\"}"
 
-status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$URL")
+registration_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$REGISTRATION_URL")
 
-if [ "$status" -ne 200 ]; then
-    echo -e "\e[31mQlocx sync: status $status\e[0m"
+if [ "$registration_status" -ne 200 ]; then
+    echo -e "\e[31mQlocx sync: registration_status $registration_status\e[0m"
     afplay ./fail.mp3
     exit 1
 else
@@ -80,6 +80,32 @@ else
     echo "$(nrfjprog --reset)"
     echo -e "\n\e[32m===== Device registration successful =====\e[0m"
     afplay ./success.mp3
+fi
+
+max_retries=5
+
+wait_time=5
+
+attempt=1
+
+while [ "$attempt" -le "$max_retries" ]; do
+    connected_status=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_SUITE_URL/clients/$deviceId")
+
+    if [ "$connected_status" -e 200 ]; then
+        echo "Device is online."
+        break
+    else
+        echo "Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
+        sleep "$wait_time"
+        attempt=$((attempt + 1))
+    fi
+done
+
+
+if [ "$attempt" -gt "$max_retries" ]; then
+    echo "Maximum retries reached. Device did not come online."
+    afplay ./fail.mp3
+    exit 1
 fi
 
 exit 0
