@@ -5,7 +5,7 @@ echo "Start programming IoT card with 32 ports..."
 # program_result=$(nrfjprog --program ./build/zephyr/merged.hex --verify 2>&1 | grep "ERROR")
 
 # if echo "$program_result" | grep "ERROR"; then
-#     echo -e "\e[31mError detected during flashing. Exiting script.\e[0m"
+#     echo -e "Error detected during flashing. Exiting script."
 
 #     afplay ./fail.mp3
 #     exit 1
@@ -14,10 +14,10 @@ echo "Start programming IoT card with 32 ports..."
 echo "Reading RAM to get device id..."
 program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
 
-# TODO: MAYBE ADD SLEEP SO THAT ENDPOINT NAME CAN HAVE SOME TIME TO BE REASSIGNED MASED ON IMEI
+# TODO: MAYBE ADD SLEEP SO THAT ENDPOINT NAME CAN HAVE SOME TIME TO BE REASSIGNED BASED ON IMEI
 
 if echo "$program_result" | grep "ERROR"; then
-    echo -e "\e[31mError detected when reading RAM. Exiting script.\e[0m"
+    echo -e "Error detected when reading RAM. Exiting script."
     afplay ./fail.mp3
     exit 1
 fi
@@ -56,13 +56,13 @@ done <<< "$memory_match"
 echo "Device id: $deviceId"
 
 if [ -z "$deviceId" ]; then
-    echo -e "\e[31mDevice id empty\e[0m"
+    echo -e "Device id empty"
 
 dotenv_file=".env"
 if [ -f "$dotenv_file" ]; then
     export $(grep -v '^#' "$dotenv_file" | xargs)
 else
-    echo -e "\e[31mQlocx sync: status $status\e[0m"
+    echo -e "Qlocx Missing dotenv file"
     afplay ./fail.mp3
     exit 1
 fi
@@ -72,7 +72,7 @@ body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\"}"
 registration_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$REGISTRATION_URL")
 
 if [ "$registration_status" -ne 200 ]; then
-    echo -e "\e[31mQlocx sync: registration_status $registration_status\e[0m"
+    echo -e "Qlocx sync: registration_status $registration_status"
     afplay ./fail.mp3
     exit 1
 else
@@ -89,8 +89,8 @@ attempt=1
 while [ "$attempt" -le "$max_retries" ]; do
     connected_status=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_SUITE_URL/clients/$deviceId")
 
-    if [ "$connected_status" -e 200 ]; then
-        echo "Device is online."
+    if [ "$connected_status" -eq 200 ]; then
+        echo "Device is online ✅"
         break
     else
         echo "Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
@@ -106,7 +106,7 @@ if [ "$attempt" -gt "$max_retries" ]; then
     exit 1
 fi
 
-echo "Device online, running test suite..."
+echo "Running test suite..."
 
 port_idx=0
 
@@ -114,16 +114,23 @@ while [ "$port_idx" -le 31 ]; do
     open_port_status=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_SUITE_URL/clients/$deviceId/10351/$port_idx/100?timeout=30&format=TLV")
 
     if [ "$open_port_status" -eq 200 ]; then
-        echo "Port $port_idx opened"
+        echo "Port $port_idx opened ✅"
         port_idx=$((port_idx + 1))
         sleep 1
     else
-        echo "Port $port_idx opening FAILED"
+        echo "Port $port_idx opening FAILED ❌"
         afplay ./fail.mp3
         exit 1
     fi
 done
-echo -e "\n\e[32m===== Device suite successful =====\e[0m"
+
+# TODO: GET STATUS FOR ALL PORTS!! /26242/0/1
+
+
+COLOR_REST="$(tput sgr0)"
+COLOR_GREEN="$(tput setaf 2)"
+printf '%s%s%s\n' $COLOR_GREEN ' ========== DEVICE PROGRAMMING SUITE SUCCESSFUL! ========== ' $COLOR_REST
+
 afplay ./success.mp3
 
 exit 0
