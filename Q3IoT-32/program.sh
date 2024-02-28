@@ -78,8 +78,6 @@ if [ "$registration_status" -ne 200 ]; then
 else
     sleep 1
     echo "$(nrfjprog --reset)"
-    echo -e "\n\e[32m===== Device registration successful =====\e[0m"
-    afplay ./success.mp3
 fi
 
 max_retries=5
@@ -107,5 +105,25 @@ if [ "$attempt" -gt "$max_retries" ]; then
     afplay ./fail.mp3
     exit 1
 fi
+
+echo "Device online, running test suite..."
+
+port_idx=0
+
+while [ "$port_idx" -le 31 ]; do
+    open_port_status=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_SUITE_URL/clients/$deviceId/10351/$port_idx/100?timeout=30&format=TLV")
+
+    if [ "$open_port_status" -eq 200 ]; then
+        echo "Port $port_idx opened"
+        port_idx=$((port_idx + 1))
+        sleep 1
+    else
+        echo "Port $port_idx opening FAILED"
+        afplay ./fail.mp3
+        exit 1
+    fi
+done
+echo -e "\n\e[32m===== Device suite successful =====\e[0m"
+afplay ./success.mp3
 
 exit 0
