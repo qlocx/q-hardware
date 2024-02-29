@@ -93,7 +93,7 @@ while [ "$attempt" -le "$max_retries" ]; do
     connected_status=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_SUITE_URL/clients/$deviceId")
 
     if [ "$connected_status" -eq 200 ]; then
-        echo "Device is online ✅"
+        echo "🟢 Device is online"
         break
     else
         echo "Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
@@ -104,7 +104,7 @@ done
 
 
 if [ "$attempt" -gt "$max_retries" ]; then
-    echo "Maximum retries reached. Device did not come online."
+    echo "❌ Maximum retries reached. Device did not come online."
     afplay ./fail.mp3
     exit 1
 fi
