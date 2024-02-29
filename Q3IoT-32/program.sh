@@ -109,7 +109,7 @@ if [ "$attempt" -gt "$max_retries" ]; then
     exit 1
 fi
 
-echo "Running test suite..."
+echo "🧪 Running test suite..."
 
 port_idx=0
 
@@ -117,22 +117,46 @@ while [ "$port_idx" -le 31 ]; do
     open_port_status=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_SUITE_URL/clients/$deviceId/10351/$port_idx/100?timeout=30&format=TLV")
 
     if [ "$open_port_status" -eq 200 ]; then
-        echo "Port $port_idx opened ✅"
+        echo "✅ Port $port_idx opened "
         port_idx=$((port_idx + 1))
         sleep 1
     else
-        echo "Port $port_idx opening FAILED ❌"
+        echo "❌ Port $port_idx opening FAILED"
         afplay ./fail.mp3
         exit 1
     fi
 done
 
-signal_strength=$(curl "$TEST_SUITE_URL/clients/$deviceId/4/0/2?timeout=30&format=TLV")
-voltage=$(curl "$TEST_SUITE_URL/clients/$deviceId/3316/0/5700?timeout=30&format=TLV")
-all_ports_status=$(curl "$TEST_SUITE_URL/clients/$deviceId/26242/0/1?timeout=30&format=TLV")
+# PRINT LABELS USING PYTHON SCRIPT
+# OTHERWISE, BJörn will be angry
 
-# TODO: FIRST CHECK IF WE ARE GETTING 200 FOR EACH REQUEST!!
-# TODO: READ AND PRINT CONTENT.VALUE OR WHATEVER SHOWS UP IN BODY RESPONE!
+all_ports_status=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/26242/0/1?timeout=30&format=TLV" | jq -r '.content.value')
+
+if [[ "$all_ports_status" -ne 4294967295 ]]; then
+    echo "❌ Error: Unexpected value in port status"
+    afplay ./fail.mp3
+    exit 1
+fi
+
+signal_strength=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/4/0/2?timeout=30&format=TLV" | jq -r '.content.value')
+
+if ! [[ "$signal_strength" =~ ^-[0-9]+$ ]]; then
+    echo "❌ Error: Unexpected value for signal strength: $signal_strength"
+    afplay ./fail.mp3
+    exit 1
+fi
+
+echo "📡 Device signal strength: $signal_strength dBm"
+
+voltage=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/3316/0/5700?timeout=30&format=TLV" | jq -r '.content.value')
+
+if ! [[ "$voltage" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    echo "❌ Error: Unexpected value for voltage $voltage"
+    afplay ./fail.mp3
+    exit 1
+fi
+
+echo "🔋 Device voltage: $voltage V"
 
 COLOR_REST="$(tput sgr0)"
 COLOR_GREEN="$(tput setaf 2)"
