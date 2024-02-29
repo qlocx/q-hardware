@@ -7,7 +7,7 @@ echo "Start programming IoT card with 32 ports..."
 # if echo "$program_result" | grep "ERROR"; then
 #     echo -e "Error detected during flashing. Exiting script."
 
-#     afplay ./fail.mp3
+#     mpg123 ./fail.mp3 > /dev/null 2>&1
 #     exit 1
 # fi
 
@@ -18,7 +18,7 @@ program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected when reading RAM. Exiting script."
-    afplay ./fail.mp3
+    mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
@@ -57,7 +57,7 @@ echo "Device id: $deviceId"
 
 if [ -z "$deviceId" ]; then
     echo -e "Device id empty"
-    afplay ./fail.mp3
+    mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
@@ -66,7 +66,7 @@ if [ -f "$dotenv_file" ]; then
     export $(grep -v '^#' "$dotenv_file" | xargs)
 else
     echo -e "Qlocx Missing dotenv file"
-    afplay ./fail.mp3
+    mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
@@ -76,7 +76,7 @@ registration_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content
 
 if [ "$registration_status" -ne 200 ]; then
     echo -e "Qlocx sync: registration_status $registration_status"
-    afplay ./fail.mp3
+    mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 else
     sleep 1
@@ -105,7 +105,7 @@ done
 
 if [ "$attempt" -gt "$max_retries" ]; then
     echo "❌ Maximum retries reached. Device did not come online."
-    afplay ./fail.mp3
+    mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
@@ -123,7 +123,7 @@ while [ "$port_idx" -le 31 ]; do
         sleep 1
     else
         echo "❌ Port $port_idx opening FAILED. Response: $open_port_response"
-        afplay ./fail.mp3
+        mpg123 ./fail.mp3 > /dev/null 2>&1
         exit 1
     fi
 done
@@ -135,7 +135,7 @@ all_ports_status=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/26242/0/1?timeout=
 
 if [[ "$all_ports_status" -ne 4294967295 ]]; then
     echo "❌ Error: Unexpected value in port status: $all_ports_status"
-    afplay ./fail.mp3
+    mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
@@ -143,7 +143,7 @@ signal_strength=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/4/0/2?timeout=30&fo
 
 if ! [[ "$signal_strength" =~ ^-[0-9]+$ ]]; then
     echo "❌ Error: Unexpected value for signal strength: $signal_strength"
-    afplay ./fail.mp3
+    mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
@@ -153,7 +153,7 @@ voltage=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/3316/0/5700?timeout=30&form
 
 if ! [[ "$voltage" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
     echo "❌ Error: Unexpected value for voltage $voltage"
-    afplay ./fail.mp3
+    mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
@@ -175,10 +175,20 @@ composite -gravity North text_image.png qr_code_resized.png - | convert - -resiz
 
 echo "🖨️ Printing label $label_value..."
 
+print_result=$(ptouch-print --image combined_image_resized.png)
+
+# TODO: INSTALL FOR PROGRAMMING COMPUTER
+# TODO: MAKE SUCCESSFUL PRINT, AND CHECK LOGS. THOSE LOGS SHOULD WE DO AN IF FOR AND RETURN ERROR IF SOMETHING GOES WRONG
+
+echo "$print_result"
+
+echo "🧹 Cleanup..." 
+rm *.png > /dev/null 2>&1
+
 COLOR_REST="$(tput sgr0)"
 COLOR_GREEN="$(tput setaf 2)"
 printf '%s%s%s\n' $COLOR_GREEN ' ========== DEVICE PROGRAMMING SUITE SUCCESSFUL! ========== ' $COLOR_REST
 
-afplay ./success.mp3
+mpg123 ./success.mp3 > /dev/null 2>&1
 
 exit 0
