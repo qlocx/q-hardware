@@ -33,6 +33,8 @@ sudo cp -r nrfjprog/* /usr/local/bin/
 sudo apt install python3-pip
 pip3 install nrfutil
 
+# TODO: INSTALL brother touch commands and magick and other depending on the errors that show up
+
 npm i
 # symlinks
 
