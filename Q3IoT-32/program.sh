@@ -128,9 +128,6 @@ while [ "$port_idx" -le 31 ]; do
     fi
 done
 
-# PRINT LABELS USING PYTHON SCRIPT
-# OTHERWISE, BJörn will be angry
-
 all_ports_status=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/26242/0/1?timeout=30&format=TLV" | jq -r '.content.value')
 
 if [[ "$all_ports_status" -ne 4294967295 ]]; then
@@ -159,10 +156,6 @@ fi
 
 echo "🔋 Device voltage: $voltage V"
 
-# run python script that uses deviceId to print using label printer with Brother printer application
-# or better yes, maybe inspect commands inside brother printer to see if we can reverse engineer it
-
-# generate image to print the last 8 chars of deviceId
 label_value=$(echo "$deviceId" | rev | cut -c 1-8 | rev)
 
 echo "📷 Generating QR code..."
