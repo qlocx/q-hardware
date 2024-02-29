@@ -158,6 +158,9 @@ fi
 
 echo "🔋 Device voltage: $voltage V"
 
+# run python script that uses deviceId to print using label printer with Brother printer application
+# or better yes, maybe inspect commands inside brother printer to see if we can reverse engineer it
+
 COLOR_REST="$(tput sgr0)"
 COLOR_GREEN="$(tput setaf 2)"
 printf '%s%s%s\n' $COLOR_GREEN ' ========== DEVICE PROGRAMMING SUITE SUCCESSFUL! ========== ' $COLOR_REST
