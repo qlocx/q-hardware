@@ -57,6 +57,9 @@ echo "Device id: $deviceId"
 
 if [ -z "$deviceId" ]; then
     echo -e "Device id empty"
+    afplay ./fail.mp3
+    exit 1
+fi
 
 dotenv_file=".env"
 if [ -f "$dotenv_file" ]; then
