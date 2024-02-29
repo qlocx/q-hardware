@@ -114,14 +114,15 @@ echo "🧪 Running test suite..."
 port_idx=0
 
 while [ "$port_idx" -le 31 ]; do
-    open_port_status=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_SUITE_URL/clients/$deviceId/10351/$port_idx/100?timeout=30&format=TLV")
+    open_port_request_body='{"id":100,"value":"0,500"}'
+    open_port_response=$(curl -s -X PUT -d "$open_port_request_body" -H "Content-Type: application/json" "$TEST_SUITE_URL/clients/$deviceId/10351/$port_idx/100?timeout=30&format=TLV")
 
-    if [ "$open_port_status" -eq 200 ]; then
+    if [ "$(echo "$open_port_response" | jq -r '.success')" = "true" ]; then
         echo "✅ Port $port_idx opened "
         port_idx=$((port_idx + 1))
         sleep 1
     else
-        echo "❌ Port $port_idx opening FAILED"
+        echo "❌ Port $port_idx opening FAILED. Response: $open_port_response"
         afplay ./fail.mp3
         exit 1
     fi
@@ -133,7 +134,7 @@ done
 all_ports_status=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/26242/0/1?timeout=30&format=TLV" | jq -r '.content.value')
 
 if [[ "$all_ports_status" -ne 4294967295 ]]; then
-    echo "❌ Error: Unexpected value in port status"
+    echo "❌ Error: Unexpected value in port status: $all_ports_status"
     afplay ./fail.mp3
     exit 1
 fi
