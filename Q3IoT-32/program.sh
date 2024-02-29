@@ -162,6 +162,19 @@ echo "🔋 Device voltage: $voltage V"
 # run python script that uses deviceId to print using label printer with Brother printer application
 # or better yes, maybe inspect commands inside brother printer to see if we can reverse engineer it
 
+# generate image to print the last 8 chars of deviceId
+label_value=$(echo "$deviceId" | rev | cut -c 1-8 | rev)
+
+echo "📷 Generating QR code..."
+convert -size 1590x210 xc:white -pointsize 180 -fill black -gravity center -annotate 0 "Qlocx Id: $label_value" text_image.png
+
+text_width=$(identify -format %w text_image.png)
+qrencode -s 26 -m 3 -o qr_code.png "$label_value" && convert qr_code.png -gravity North -background white -extent +0-40 qr_code_resized.png && convert qr_code_resized.png -resize ${text_width}x qr_code_resized.png
+
+composite -gravity North text_image.png qr_code_resized.png - | convert - -resize 2048x409 combined_image_resized.png
+
+echo "🖨️ Printing label $label_value..."
+
 COLOR_REST="$(tput sgr0)"
 COLOR_GREEN="$(tput setaf 2)"
 printf '%s%s%s\n' $COLOR_GREEN ' ========== DEVICE PROGRAMMING SUITE SUCCESSFUL! ========== ' $COLOR_REST
