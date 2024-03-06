@@ -5,6 +5,14 @@ echo "Make sure to:"
 echo "1. Connect the debugger to the board and the computer"
 echo "2. Connect power cord to board"
 echo "3. Connect printer to computer"
+echo "4. Connect printer to power"
+
+echo "Checking if printer is connected..."
+
+usb_device_list=$(lsusb)
+
+# if not includes brother industries, exit script with message that says that printer is not connected
+"Brother Industries, Ltd"
 
 echo "Programming hex file..."
 program_result=$(nrfjprog --program ./merged.hex --verify 2>&1 | grep "ERROR")
