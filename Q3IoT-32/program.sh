@@ -17,6 +17,7 @@ if ! lsusb | grep -q "Brother Industries, Ltd"; then
 fi
 
 echo "Programming hex file..."
+nrfjprog --eraseall
 nrfjprog --reset
 program_result=$(nrfjprog --program ./merged.hex --verify 2>&1 | grep "ERROR")
 
@@ -85,20 +86,27 @@ wait_time=10
 
 attempt=1
 
-while [ "$attempt" -le "$max_retries" ]; do
-    connected_response=$(curl -s -w "%{http_code}\n" "$TEST_SUITE_URL/clients/$deviceId" -o >(cat))
-    connected_status="${connected_response: -3}"
-    device_sleeping=$(echo "${connected_response:0: -3}" | jq -r '.sleeping' 2>/dev/null)
+# while [ "$attempt" -le "$max_retries" ]; do
+#     connected_response=$(curl -s -w "%{http_code}\n" "$TEST_SUITE_URL/clients/$deviceId" -o >(cat))
+#     connected_status="${connected_response: -3}"
 
-if [ "$connected_status" -eq 200 ] && [ "$device_sleeping" == "false" ]; then
-        echo "🟢 Device is online"
-        break
-    else
-        echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
-        sleep "$wait_time"
-        attempt=$((attempt + 1))
-    fi
-done
+# if [ "$connected_status" -eq 200 ]; then
+#     device_sleeping=$(echo "${connected_response:0: -3}" | jq -r '.sleeping')
+
+#     if [ "$device_sleeping" == "false" ]; then
+#         echo "🟢 Device is online"
+#         break
+#     else 
+#         echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
+#         sleep "$wait_time"
+#         attempt=$((attempt + 1))
+#     fi
+# else
+#     echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
+#     sleep "$wait_time"
+#     attempt=$((attempt + 1))
+# fi
+# done
 
 
 if [ "$attempt" -gt "$max_retries" ]; then
