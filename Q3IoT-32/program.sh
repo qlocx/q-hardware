@@ -1,7 +1,12 @@
 #!/bin/bash
 
 echo "Start programming IoT card with 32 ports..."
+echo "Make sure to:"
+echo "1. Connect the debugger to the board and the computer"
+echo "2. Connect power cord to board"
+echo "3. Connect printer to computer"
 
+echo "Programming hex file..."
 program_result=$(nrfjprog --program ./merged.hex --verify 2>&1 | grep "ERROR")
 
 if echo "$program_result" | grep "ERROR"; then
@@ -12,9 +17,10 @@ if echo "$program_result" | grep "ERROR"; then
 fi
 
 echo "Reading RAM to get device id..."
-program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
 
-# TODO: MAYBE ADD SLEEP SO THAT ENDPOINT NAME CAN HAVE SOME TIME TO BE REASSIGNED BASED ON IMEI
+sleep 5
+
+program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected when reading RAM. Exiting script."
@@ -22,36 +28,13 @@ if echo "$program_result" | grep "ERROR"; then
     exit 1
 fi
 
-memory_match=$(grep -A 1 "5133496F542D" ram.hex | head -n 2)
+memory_match=$(grep -A 1 "5133496F542D" ram.hex | head -n 2 | tr -d '[:space:]')
 
 line_number=1
 
-deviceId=""
-# Iterate through each line and print
-while IFS= read -r line; do
-    parsed_data=$(echo -e "$line" | xxd -r -p | iconv -f latin1)
-    if [ "$line_number" -eq 1 ]; then
-       deviceId=$(echo "$parsed_data" | sed 's/.*Q3IoT-/Q3IoT-/;s/[^A-Za-z0-9-]//g')
-    else
-     for ((i=0; i<${#parsed_data}; i++)); do
-         char="${parsed_data:$i:1}"
-         
-         if [[ "$char" =~ [0-9] ]]; then
-             found_numeric=true
-         fi
-
-         if [ "$found_numeric" = true ]; then
-             deviceId+="$char"
-
-             if [ ${#deviceId} -eq 21 ]; then
-                 break
-             fi
-         fi
-     done
-    fi
-
-    line_number=$((line_number + 1))
-done <<< "$memory_match"
+parsed_data=$(echo -e "$memory_match" | xxd -r -p | iconv -f latin1)
+only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c 2-16)
+deviceId="Q3IoT-$only_nums"
 
 echo "Device id: $deviceId"
 
@@ -70,17 +53,16 @@ else
     exit 1
 fi
 
+echo "📝 Registering device in system..."
 body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\"}"
 
 registration_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$REGISTRATION_URL")
 
+# TODO: also check if sleeping in response body, exit if sleeping is true
 if [ "$registration_status" -ne 200 ]; then
     echo -e "Qlocx sync: registration_status $registration_status"
     mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
-else
-    sleep 1
-    echo "$(nrfjprog --reset)"
 fi
 
 max_retries=5
@@ -96,7 +78,7 @@ while [ "$attempt" -le "$max_retries" ]; do
         echo "🟢 Device is online"
         break
     else
-        echo "Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
+        echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
         sleep "$wait_time"
         attempt=$((attempt + 1))
     fi
@@ -168,7 +150,8 @@ composite -gravity North text_image.png qr_code_resized.png - | convert - -resiz
 
 echo "🖨️ Printing label $label_value..."
 
-print_result=$(ptouch-print --image combined_image_resized.png)
+# todo: configure printer once here: http://localhost:8000
+print_result=$(ghostscript-printer-app combined_image_resized.png)
 
 # TODO: INSTALL FOR PROGRAMMING COMPUTER
 # TODO: MAKE SUCCESSFUL PRINT, AND CHECK LOGS. THOSE LOGS SHOULD WE DO AN IF FOR AND RETURN ERROR IF SOMETHING GOES WRONG
