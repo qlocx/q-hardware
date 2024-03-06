@@ -9,10 +9,12 @@ echo "4. Connect printer to power"
 
 echo "Checking if printer is connected..."
 
-usb_device_list=$(lsusb)
+if ! lsusb | grep -q "Brother Industries, Ltd"; then
+    echo -e "Printer not connected"
 
-# if not includes brother industries, exit script with message that says that printer is not connected
-"Brother Industries, Ltd"
+    mpg123 ./fail.mp3 > /dev/null 2>&1
+    exit 1
+fi
 
 echo "Programming hex file..."
 program_result=$(nrfjprog --program ./merged.hex --verify 2>&1 | grep "ERROR")
