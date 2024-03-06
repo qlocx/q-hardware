@@ -72,9 +72,11 @@ wait_time=5
 attempt=1
 
 while [ "$attempt" -le "$max_retries" ]; do
-    connected_status=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_SUITE_URL/clients/$deviceId")
+    connected_response=$(curl -s -w "%{http_code}\n%{response_body}" "$TEST_SUITE_URL/clients/$deviceId")
+    connected_status=$(echo "$connected_response" | head -n 1)
+    device_sleeping=$(echo "$connected_response" | tail -n 1 | jq -r '.sleeping')
 
-    if [ "$connected_status" -eq 200 ]; then
+if [ "$connected_status" -eq 200 ] && [ "$device_sleeping" == "false" ]; then
         echo "🟢 Device is online"
         break
     else
