@@ -10,13 +10,14 @@ echo "4. Connect printer to power"
 echo "Checking if printer is connected..."
 
 if ! lsusb | grep -q "Brother Industries, Ltd"; then
-    echo -e "Printer not connected"
+    echo -e "Printer not connected or not powered on"
 
     mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
 echo "Programming hex file..."
+nrfjprog --reset
 program_result=$(nrfjprog --program ./merged.hex --verify 2>&1 | grep "ERROR")
 
 if echo "$program_result" | grep "ERROR"; then
@@ -28,7 +29,7 @@ fi
 
 echo "Reading RAM to get device id..."
 
-sleep 5
+sleep 10
 
 program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
 
@@ -87,7 +88,7 @@ attempt=1
 while [ "$attempt" -le "$max_retries" ]; do
     connected_response=$(curl -s -w "%{http_code}\n" "$TEST_SUITE_URL/clients/$deviceId" -o >(cat))
     connected_status="${connected_response: -3}"
-    device_sleeping=$(echo "${connected_response:0: -3}" | jq -r '.sleeping')
+    device_sleeping=$(echo "${connected_response:0: -3}" | jq -r '.sleeping' 2>/dev/null)
 
 if [ "$connected_status" -eq 200 ] && [ "$device_sleeping" == "false" ]; then
         echo "🟢 Device is online"
