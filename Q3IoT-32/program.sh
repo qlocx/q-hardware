@@ -32,7 +32,7 @@ memory_match=$(grep -A 1 "5133496F542D" ram.hex | head -n 2 | tr -d '[:space:]')
 
 line_number=1
 
-parsed_data=$(echo -e "$memory_match" | xxd -r -p | iconv -f latin1)
+parsed_data=$(echo -e "$memory_match" | xxd -r -p -c 256 | iconv -f latin1)
 only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c 2-16)
 deviceId="Q3IoT-$only_nums"
 
@@ -58,23 +58,26 @@ body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\"}"
 
 registration_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$REGISTRATION_URL")
 
-# TODO: also check if sleeping in response body, exit if sleeping is true
 if [ "$registration_status" -ne 200 ]; then
     echo -e "Qlocx sync: registration_status $registration_status"
     mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
 
-max_retries=5
+echo "🕒 Waiting 20s for device to connect"
 
-wait_time=5
+sleep 20
+
+max_retries=20
+
+wait_time=10
 
 attempt=1
 
 while [ "$attempt" -le "$max_retries" ]; do
     connected_response=$(curl -s -w "%{http_code}\n" "$TEST_SUITE_URL/clients/$deviceId" -o >(cat))
-    connected_status=$(echo "$connected_response" | head -n 1)
-    device_sleeping=$(echo "$connected_response" | tail -n 1 | jq -r '.sleeping')
+    connected_status="${connected_response: -3}"
+    device_sleeping=$(echo "${connected_response:0: -3}" | jq -r '.sleeping')
 
 if [ "$connected_status" -eq 200 ] && [ "$device_sleeping" == "false" ]; then
         echo "🟢 Device is online"
@@ -143,25 +146,25 @@ echo "🔋 Device voltage: $voltage V"
 label_value=$(echo "$deviceId" | rev | cut -c 1-8 | rev)
 
 echo "📷 Generating QR code..."
-convert -size 1590x210 xc:white -pointsize 180 -fill black -gravity center -annotate 0 "Qlocx Id: $label_value" text_image.png
+convert -size 1590x210 xc:white -pointsize 180 -fill black -gravity center -annotate 0 "Qlocx Id: $label_value" -extent 1590x350 text_image.png
 
 text_width=$(identify -format %w text_image.png)
-qrencode -s 26 -m 3 -o qr_code.png "$label_value" && convert qr_code.png -gravity North -background white -extent +0-40 qr_code_resized.png && convert qr_code_resized.png -resize $((text_width / 3))x qr_code_resized.png
+qrencode -s 26 -m 3 -o qr_code.png "$label_value" && convert qr_code.png -gravity North -background white -borderColor white -border 150x150 -extent +0-40 qr_code_resized.png && convert qr_code_resized.png -resize ${text_width}x qr_code_resized.png
 
-composite -gravity North text_image.png qr_code_resized.png - | convert - -resize 2048x409 combined_image_resized.png
+composite -gravity North text_image.png qr_code_resized.png - | convert - -resize 2048x409 -rotate 90 combined_image_resized.png
 
 echo "🖨️ Printing label $label_value..."
 
 # todo: configure printer once here: http://localhost:8000
+# create two label prints, for top and bottom
+print_result=$(ghostscript-printer-app combined_image_resized.png)
 print_result=$(ghostscript-printer-app combined_image_resized.png)
 
-# TODO: INSTALL FOR PROGRAMMING COMPUTER
-# TODO: MAKE SUCCESSFUL PRINT, AND CHECK LOGS. THOSE LOGS SHOULD WE DO AN IF FOR AND RETURN ERROR IF SOMETHING GOES WRONG
-
-echo "$print_result"
+echo "Second print job id: $print_result"
 
 echo "🧹 Cleanup..." 
 rm *.png > /dev/null 2>&1
+rm ram.hex > /dev/null 2>&1
 
 COLOR_REST="$(tput sgr0)"
 COLOR_GREEN="$(tput setaf 2)"
