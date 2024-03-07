@@ -9,12 +9,12 @@ echo "4. Connect printer to power"
 
 echo "Checking if printer is connected..."
 
-if ! lsusb | grep -q "Brother Industries, Ltd"; then
-    echo -e "Printer not connected or not powered on"
+# if ! lsusb | grep -q "Brother Industries, Ltd"; then
+#     echo -e "Printer not connected or not powered on"
 
-    mpg123 ./fail.mp3 > /dev/null 2>&1
-    exit 1
-fi
+#     mpg123 ./fail.mp3 > /dev/null 2>&1
+#     exit 1
+# fi
 
 echo "Programming hex file..."
 nrfjprog --eraseall
@@ -41,6 +41,8 @@ if echo "$program_result" | grep "ERROR"; then
 fi
 
 memory_match=$(grep -A 1 "5133496F542D" ram.hex | head -n 2 | tr -d '[:space:]')
+
+nrfjprog --reset
 
 line_number=1
 
@@ -87,25 +89,17 @@ wait_time=10
 attempt=1
 
 while [ "$attempt" -le "$max_retries" ]; do
-    connected_response=$(curl -s -w "%{http_code}\n" "$TEST_SUITE_URL/clients/$deviceId" -o >(cat))
-    connected_status="${connected_response: -3}"
+   signal_strength=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/4/0/2?timeout=30&format=TLV" | jq -r '.content.value')
 
-if [ "$connected_status" -eq 200 ]; then
-    device_sleeping=$(echo "${connected_response:0: -3}" | jq -r '.sleeping')
-
-    if [ "$device_sleeping" == "false" ]; then
-        echo "🟢 Device is online"
-        break
-    else 
+    if ! [[ "$signal_strength" =~ ^-[0-9]+$ ]]; then
         echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
         sleep "$wait_time"
         attempt=$((attempt + 1))
+    else
+        echo "🟢 Device is online"
+        echo "📡 Device signal strength: $signal_strength dBm"
+        break
     fi
-else
-    echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
-    sleep "$wait_time"
-    attempt=$((attempt + 1))
-fi
 done
 
 
@@ -141,16 +135,6 @@ if [[ "$all_ports_status" -ne 4294967295 ]]; then
     mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
-
-signal_strength=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/4/0/2?timeout=30&format=TLV" | jq -r '.content.value')
-
-if ! [[ "$signal_strength" =~ ^-[0-9]+$ ]]; then
-    echo "❌ Error: Unexpected value for signal strength: $signal_strength"
-    mpg123 ./fail.mp3 > /dev/null 2>&1
-    exit 1
-fi
-
-echo "📡 Device signal strength: $signal_strength dBm"
 
 voltage=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/3316/0/5700?timeout=30&format=TLV" | jq -r '.content.value')
 
