@@ -44,7 +44,7 @@ memory_match=$(grep -A 1 "5133496F542D" ram.hex | head -n 2 | tr -d '[:space:]')
 
 line_number=1
 
-parsed_data=$(echo -e "$memory_match" | xxd -r -p -c 256 | iconv -f latin1)
+parsed_data=$(echo -e "$memory_match" | xxd -r -p | iconv -f latin1)
 only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c 2-16)
 deviceId="Q3IoT-$only_nums"
 
@@ -86,27 +86,27 @@ wait_time=10
 
 attempt=1
 
-# while [ "$attempt" -le "$max_retries" ]; do
-#     connected_response=$(curl -s -w "%{http_code}\n" "$TEST_SUITE_URL/clients/$deviceId" -o >(cat))
-#     connected_status="${connected_response: -3}"
+while [ "$attempt" -le "$max_retries" ]; do
+    connected_response=$(curl -s -w "%{http_code}\n" "$TEST_SUITE_URL/clients/$deviceId" -o >(cat))
+    connected_status="${connected_response: -3}"
 
-# if [ "$connected_status" -eq 200 ]; then
-#     device_sleeping=$(echo "${connected_response:0: -3}" | jq -r '.sleeping')
+if [ "$connected_status" -eq 200 ]; then
+    device_sleeping=$(echo "${connected_response:0: -3}" | jq -r '.sleeping')
 
-#     if [ "$device_sleeping" == "false" ]; then
-#         echo "🟢 Device is online"
-#         break
-#     else 
-#         echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
-#         sleep "$wait_time"
-#         attempt=$((attempt + 1))
-#     fi
-# else
-#     echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
-#     sleep "$wait_time"
-#     attempt=$((attempt + 1))
-# fi
-# done
+    if [ "$device_sleeping" == "false" ]; then
+        echo "🟢 Device is online"
+        break
+    else 
+        echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
+        sleep "$wait_time"
+        attempt=$((attempt + 1))
+    fi
+else
+    echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
+    sleep "$wait_time"
+    attempt=$((attempt + 1))
+fi
+done
 
 
 if [ "$attempt" -gt "$max_retries" ]; then
