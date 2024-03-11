@@ -1,3 +1,4 @@
+#!/bin/bash
 git reset --hard HEAD
 git pull
 
@@ -20,7 +21,7 @@ echo ""
 echo ""
 echo ""
 
-echo -e "${WHITE_BG}${RED}"
+echo -e "${RED}"
 
 echo "   ____    ____    _____   _______            _ _   _       ____ ___                     _       "
 echo "  / __ \  |___ \  |_   _| |__   __|          (_) | | |     |___ \__ \                   | |      "

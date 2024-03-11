@@ -19,7 +19,7 @@ echo "Checking if printer is connected..."
 echo "Programming hex file..."
 nrfjprog --eraseall
 nrfjprog --reset
-program_result=$(nrfjprog --program ./merged.hex --verify 2>&1 | grep "ERROR")
+program_result=$(nrfjprog --program ./releases/v.1.11-mfw-1.3.5-ncs-2.2.0-32-ports/merged.hex --verify 2>&1 | grep "ERROR")
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
@@ -46,8 +46,8 @@ nrfjprog --reset
 
 line_number=1
 
-parsed_data=$(echo -e "$memory_match" | xxd -r -p | iconv -f latin1)
-only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c 2-16)
+parsed_data=$(echo -e "$memory_match" | xxd -r -p | iconv -f latin1 | sed 's/Q3IoT-/-/g')
+only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c -16)
 deviceId="Q3IoT-$only_nums"
 
 echo "Device id: $deviceId"
@@ -78,9 +78,9 @@ if [ "$registration_status" -ne 200 ]; then
     exit 1
 fi
 
-echo "🕒 Waiting 20s for device to connect"
+echo "🕒 Waiting for device to connect..."
 
-sleep 20
+sleep 10
 
 max_retries=20
 
@@ -154,7 +154,7 @@ convert -size 1590x210 xc:white -pointsize 180 -fill black -gravity center -anno
 text_width=$(identify -format %w text_image.png)
 qrencode -s 26 -m 3 -o qr_code.png "$label_value" && convert qr_code.png -gravity North -background white -borderColor white -border 150x150 -extent +0-40 qr_code_resized.png && convert qr_code_resized.png -resize ${text_width}x qr_code_resized.png
 
-composite -gravity North text_image.png qr_code_resized.png - | convert - -resize 2048x409 -rotate 90 combined_image_resized.png
+composite -gravity North text_image.png qr_code_resized.png - | convert - -resize 2048x409 combined_image_resized.png
 
 echo "🖨️ Printing label $label_value..."
 
@@ -169,10 +169,14 @@ echo "🧹 Cleanup..."
 rm *.png > /dev/null 2>&1
 rm ram.hex > /dev/null 2>&1
 
-COLOR_REST="$(tput sgr0)"
-COLOR_GREEN="$(tput setaf 2)"
-printf '%s%s%s\n' $COLOR_GREEN ' ========== DEVICE PROGRAMMING SUITE SUCCESSFUL! ========== ' $COLOR_REST
-
 mpg123 ./success.mp3 > /dev/null 2>&1
+
+
+GREEN="\e[32m"
+BLACK='\033[1;90m'
+
+echo -e "${GREEN}"
+echo '========== DEVICE PROGRAMMING SUITE SUCCESSFUL! =========='
+echo -e "${BLACK}"
 
 exit 0
