@@ -4,7 +4,12 @@ sudo apt-get install software-properties-common
 sudo apt-add-repository universe
 sudo apt-get update
 sudo apt-get install -y python-pip
+sudo apt-get install -y mpg123
+sudo apt-get install -y qrencode
 sudo apt install -y make
+sudo apt install -y build-essential
+sudo apt install imagemagick
+sudo snap install ghostscript-printer-app
 
 # the installation of node depends on the computer/debian version
 # sudo apt install nodejs

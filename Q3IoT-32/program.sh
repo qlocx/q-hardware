@@ -80,6 +80,8 @@ fi
 
 echo "🕒 Waiting for device to connect..."
 
+sleep 10
+
 max_retries=20
 
 wait_time=10
