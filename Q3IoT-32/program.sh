@@ -167,10 +167,11 @@ echo "🧹 Cleanup..."
 rm *.png > /dev/null 2>&1
 rm ram.hex > /dev/null 2>&1
 
-COLOR_REST="$(tput sgr0)"
-COLOR_GREEN="$(tput setaf 2)"
-printf '%s%s%s\n' $COLOR_GREEN ' ========== DEVICE PROGRAMMING SUITE SUCCESSFUL! ========== ' $COLOR_REST
-
 mpg123 ./success.mp3 > /dev/null 2>&1
+
+COLOR_REST="\e[0m"
+COLOR_GREEN="\e[32m"
+
+printf '%s%s%s\n' "$COLOR_GREEN" ' ========== DEVICE PROGRAMMING SUITE SUCCESSFUL! ========== ' "$COLOR_REST"
 
 exit 0
