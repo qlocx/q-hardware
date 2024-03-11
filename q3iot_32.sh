@@ -47,7 +47,7 @@ echo "                                                                          
 echo "                                                                                                                                                          ";
 
 
-read -s key
+read -n 1 key
 
 # if user input is X then exit
 if [ "$key" = "X" ]; then
