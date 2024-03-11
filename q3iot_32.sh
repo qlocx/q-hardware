@@ -1,3 +1,4 @@
+#!/bin/bash
 git reset --hard HEAD
 git pull
 
@@ -47,7 +48,7 @@ echo "                                                                          
 echo "                                                                                                                                                          ";
 
 
-read -rsn1 key
+read -n 1 -s key
 
 # if user input is X then exit
 if [ "$key" = "X" ]; then
