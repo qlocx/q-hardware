@@ -17,7 +17,7 @@ echo "Checking if printer is connected..."
 # fi
 
 echo "Programming mfw file..."
-nrfjprog --program ./mfw_nrf9160_1.3.5.zip --verify
+program_result=$(nrfjprog --program ./mfw_nrf9160_1.3.5.zip --verify)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
