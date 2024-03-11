@@ -169,9 +169,12 @@ rm ram.hex > /dev/null 2>&1
 
 mpg123 ./success.mp3 > /dev/null 2>&1
 
-COLOR_REST="\e[0m"
-COLOR_GREEN="\e[32m"
 
-printf '%s%s%s\n' "$COLOR_GREEN" ' ========== DEVICE PROGRAMMING SUITE SUCCESSFUL! ========== ' "$COLOR_REST"
+GREEN="\e[32m"
+BLACK='\033[1;90m'
+
+echo -e "${GREEN}"
+echo '========== DEVICE PROGRAMMING SUITE SUCCESSFUL! =========='
+echo -e "${BLACK}"
 
 exit 0
