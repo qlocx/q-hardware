@@ -47,7 +47,7 @@ nrfjprog --reset
 line_number=1
 
 parsed_data=$(echo -e "$memory_match" | xxd -r -p | iconv -f latin1 | sed 's/Q3IoT-/-/g')
-only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c 2-16)
+only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c -16)
 deviceId="Q3IoT-$only_nums"
 
 echo "Device id: $deviceId"
