@@ -16,6 +16,17 @@ if ! lsusb | grep -q "Brother Industries, Ltd"; then
     exit 1
 fi
 
+echo "Programming mfw file..."
+program_result=$(nrfjprog --program ./mfw_nrf9160_1.3.5.zip --verify)
+
+if echo "$program_result" | grep "ERROR"; then
+    echo -e "Error detected during flashing. Exiting script."
+
+    mpg123 ./fail.mp3 > /dev/null 2>&1
+    exit 1
+fi
+
+
 echo "Programming hex file..."
 nrfjprog --eraseall
 nrfjprog --reset
