@@ -9,12 +9,12 @@ echo "4. Connect printer to power"
 
 echo "Checking if printer is connected..."
 
-# if ! lsusb | grep -q "Brother Industries, Ltd"; then
-#     echo -e "Printer not connected or not powered on"
+if ! lsusb | grep -q "Brother Industries, Ltd"; then
+    echo -e "Printer not connected or not powered on"
 
-#     mpg123 ./fail.mp3 > /dev/null 2>&1
-#     exit 1
-# fi
+    mpg123 ./fail.mp3 > /dev/null 2>&1
+    exit 1
+fi
 
 echo "Programming hex file..."
 nrfjprog --eraseall
