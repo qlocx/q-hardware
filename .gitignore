@@ -4,3 +4,5 @@ package-lock.json
 .DS_Store
 bleid.txt
 log.log
+ram.hex
+.env
