@@ -16,10 +16,10 @@ if ! lsusb | grep -q "Brother Industries, Ltd"; then
     exit 1
 fi
 
-nrfjprog --eraseall
-nrfjprog --reset
+nrfjprog --eraseall > /dev/null 2>&1
+nrfjprog --reset > /dev/null 2>&1
 echo "Programming mfw file..."
-program_result=$(nrfjprog --program ./mfw_nrf9160_1.3.5.zip --verify 2>&1 | grep "ERROR")
+program_result=$(nrfjprog --program ./mfw_nrf9160_1.3.5.zip --verify 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
@@ -30,7 +30,7 @@ fi
 
 
 echo "Programming hex file..."
-program_result=$(nrfjprog --program ./releases/v.1.11.1-mfw-1.3.5-ncs-2.2.0-32-ports/merged.hex --verify 2>&1 | grep "ERROR")
+program_result=$(nrfjprog --program ./releases/v.1.11.1-mfw-1.3.5-ncs-2.2.0-32-ports/merged.hex --verify 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
@@ -43,7 +43,7 @@ echo "Reading RAM to get device id..."
 
 sleep 10
 
-program_result=$(nrfjprog --readram ram.hex 2>&1 | grep "ERROR")
+program_result=$(nrfjprog --readram ram.hex 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected when reading RAM. Exiting script."
