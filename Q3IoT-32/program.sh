@@ -16,8 +16,10 @@ if ! lsusb | grep -q "Brother Industries, Ltd"; then
     exit 1
 fi
 
+nrfjprog --eraseall
+nrfjprog --reset
 echo "Programming mfw file..."
-program_result=$(nrfjprog --program ./mfw_nrf9160_1.3.5.zip --verify)
+program_result=$(nrfjprog --program ./mfw_nrf9160_1.3.5.zip --verify 2>&1 | grep "ERROR")
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
@@ -28,9 +30,7 @@ fi
 
 
 echo "Programming hex file..."
-nrfjprog --eraseall
-nrfjprog --reset
-program_result=$(nrfjprog --program ./releases/v.1.11-mfw-1.3.5-ncs-2.2.0-32-ports/merged.hex --verify 2>&1 | grep "ERROR")
+program_result=$(nrfjprog --program ./releases/v.1.11.1-mfw-1.3.5-ncs-2.2.0-32-ports/merged.hex --verify 2>&1 | grep "ERROR")
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
@@ -57,7 +57,7 @@ nrfjprog --reset
 
 line_number=1
 
-parsed_data=$(echo -e "$memory_match" | xxd -r -p | iconv -f latin1 | sed 's/Q3IoT-/-/g')
+parsed_data=$(echo -e "$memory_match" | xxd -r -p | awk -F'Q3IoT-' '{print $2}' | tr -cd '0-9')
 only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c -16)
 deviceId="Q3IoT-$only_nums"
 
@@ -100,7 +100,7 @@ wait_time=10
 attempt=1
 
 while [ "$attempt" -le "$max_retries" ]; do
-   signal_strength=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/4/0/2?timeout=30&format=TLV" | jq -r '.content.value')
+   signal_strength=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/4/0/2?timeout=60&format=TLV" | jq -r '.content.value')
 
     if ! [[ "$signal_strength" =~ ^-[0-9]+$ ]]; then
         echo "🕒 Attempt $attempt: Device is not online yet. Retrying in $wait_time seconds..."
@@ -139,7 +139,7 @@ while [ "$port_idx" -le 31 ]; do
     fi
 done
 
-all_ports_status=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/26242/0/1?timeout=30&format=TLV" | jq -r '.content.value')
+all_ports_status=$(curl -s "$TEST_SUITE_URL/clients/$deviceId/26242/0/1?timeout=60&format=TLV" | jq -r '.content.value')
 
 if [[ "$all_ports_status" -ne 4294967295 ]]; then
     echo "❌ Error: Unexpected value in port status: $all_ports_status"
