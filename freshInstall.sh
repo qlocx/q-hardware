@@ -18,7 +18,10 @@ sudo snap install ghostscript-printer-app
 # nvm install 16
 # nvm use 16
 
-sudo cp -r gcc-arm-none-eabi-7-2017-q4-major/* /usr/local
+platform=$(uname)
+gcc_dir="gcc-arm-none-eabi-7-2017-q4-major-$( [[ $platform == "Linux" ]] && echo "linux" || echo "macos" )/arm-none-eabi"
+
+sudo cp -r "$gcc_dir" /usr/local/arm-none-eabi
 
 cd libsodium-1.0.17
 export LDFLAGS='--specs=nosys.specs'
