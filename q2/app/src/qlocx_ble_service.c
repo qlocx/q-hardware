@@ -83,6 +83,21 @@ static void qlocx_ble_flush_tx_buffer(qlocx_ble_t *ctx)
 
 }
 
+static int qlocx_data_is_eot(qlocx_ble_t* context, const uint8_t* data, size_t data_length) {
+  if (data_length == 0) return 1;
+
+  if (data_length == 2
+    &&
+    context->rx_buffer[context->rx_length - 1] == 0xef &&
+    context->rx_buffer[context->rx_length - 2] == 0xbe
+    ) {
+    context->rx_length = context->rx_length - 2;
+    return 1;
+  }
+
+  return 0;
+}
+
 static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_length) {
 
   NRF_LOG_INFO("Remote timeout in thirty seconds.");
@@ -101,7 +116,7 @@ static void data_handler(qlocx_ble_t* context, const uint8_t* data, size_t data_
   context->rx_length += data_length;
 
   // if the packet wasn't empty, we expect another one
-  if (data_length) return;
+  if (qlocx_data_is_eot(context, data, data_length) == 0) return;
 
   if (!context->encryption_configured) {
 

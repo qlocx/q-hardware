@@ -2,7 +2,7 @@ PROJECT_NAME     := ble_app_buttonless_dfu_pca10040_s132
 TARGETS          := nrf52832_xxaa
 OUTPUT_DIRECTORY := build
 
-SDK_ROOT := ../nRF5_SDK_15.0.0_a53641a
+SDK_ROOT := ../../nRF5_SDK_15.0.0_a53641a
 PROJ_DIR := .
 
 $(OUTPUT_DIRECTORY)/nrf52832_xxaa.out: \
