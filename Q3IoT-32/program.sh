@@ -109,7 +109,6 @@ while [ "$attempt" -le "$max_retries" ]; do
     else
         echo "🟢 Device is online"
         echo "📡 Device signal strength: $signal_strength dBm"
-        # send curl command to slack, use .env file from slack token....
         break
     fi
 done
