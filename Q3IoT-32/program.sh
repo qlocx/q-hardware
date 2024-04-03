@@ -9,7 +9,7 @@ echo "4. Connect printer to power"
 
 echo "Checking if printer is connected..."
 
-if ! lsusb | grep -q "Brother Industries, Ltd"; then
+if ! lsusb | grep -q "Brother"; then
     echo -e "Printer not connected or not powered on"
 
     mpg123 ./fail.mp3 > /dev/null 2>&1
