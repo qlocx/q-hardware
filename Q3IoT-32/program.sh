@@ -129,9 +129,9 @@ while [ "$attempt" -le "$max_retries" ]; do
         echo "🟢 Device is online"
         echo "📡 Device signal strength: $signal_strength dBm"
         SLACK_URL="https://slack.com/api/chat.postMessage"
-        CHANNEL="qiot-demo-logs"
+        CHANNEL="qiot-test-logs"
 
-        message="New QIoT-32 device online: $deviceId, signal strength: $signal_strength dBm"
+        message="🟢 New QIoT-32 device online: $deviceId, signal strength: 📡  $signal_strength dBm"
 
     curl -X POST "$SLACK_URL" -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json; charset=utf-8" --data "{\"text\":\"$message\",\"channel\":\"$CHANNEL\"}"
     fi
