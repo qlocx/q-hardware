@@ -53,6 +53,7 @@ while [ $retry_deviceId_count -lt $max_deviceId_retries ]; do
     echo "Attempt $((retry_deviceId_count + 1)): Reading RAM to get device id..."
     
     program_result=$(nrfjprog --readram ram.bin 2>&1)
+    nrfjprog --reset > /dev/null 2>&1
 
     if echo "$program_result" | grep "ERROR"; then
         echo -e "Error detected when reading RAM. Exiting script."
