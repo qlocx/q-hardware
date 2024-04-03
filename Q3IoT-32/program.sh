@@ -40,20 +40,15 @@ if echo "$program_result" | grep "ERROR"; then
     exit 1
 fi
 
-echo "Reading RAM to get device id..."
-
-sleep 10
-
-line_number=1
-
 retry_deviceId_count=0
 max_deviceId_retries=9
 
 while [ $retry_deviceId_count -lt $max_deviceId_retries ]; do
     echo "Attempt $((retry_deviceId_count + 1)): Reading RAM to get device id..."
     
-    program_result=$(nrfjprog --readram ram.bin 2>&1)
     nrfjprog --reset > /dev/null 2>&1
+    sleep 10
+    program_result=$(nrfjprog --readram ram.bin 2>&1)
 
     if echo "$program_result" | grep "ERROR"; then
         echo -e "Error detected when reading RAM. Exiting script."
@@ -70,7 +65,6 @@ while [ $retry_deviceId_count -lt $max_deviceId_retries ]; do
             echo "Error: Length of deviceId is not equal to 21 characters." >&2
             ((retry_deviceId_count++))
             echo "Retrying read operation in 10 seconds..."
-            sleep 10
         else
             echo "Device ID successfully parsed: $parse_device_id_result"
             break  # Exit the loop if device ID is found
@@ -78,7 +72,6 @@ while [ $retry_deviceId_count -lt $max_deviceId_retries ]; do
     else
         echo "Device ID not found in RAM. Retrying parsing operation in 10 seconds..."
         ((retry_deviceId_count++))
-        sleep 10
     fi
 done
 
@@ -132,7 +125,8 @@ while [ "$attempt" -le "$max_retries" ]; do
         CHANNEL="qiot-test-logs"
 
         message="🟢 New QIoT-32 device online: $deviceId, signal strength: 📡  $signal_strength dBm"
-        curl -X POST "$SLACK_URL" -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json; charset=utf-8" --data "{\"text\":\"$message\",\"channel\":\"$CHANNEL\"}"
+        curl -X POST "$SLACK_URL" -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json; charset=utf-8" --data "{\"text\":\"$message\",\"channel\":\"$CHANNEL\"}" > /dev/null 2>&1
+        break
     fi
 done
 
