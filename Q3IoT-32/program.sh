@@ -42,9 +42,9 @@ fi
 
 echo "Reading RAM to get device id..."
 
-sleep 30
+sleep 10
 
-program_result=$(nrfjprog --readram ram.hex 2>&1)
+program_result=$(nrfjprog --readram ram.bin 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected when reading RAM. Exiting script."
@@ -52,20 +52,16 @@ if echo "$program_result" | grep "ERROR"; then
     exit 1
 fi
 
-memory_match=$(grep -A 1 "5133496F542D" ram.hex | head -n 2 | tr -d '[:space:]')
+deviceId=$(strings ram.bin | grep "Q3IoT" | sed 's/.*\(Q3IoT\)/\1/')
 
 nrfjprog --reset
 
 line_number=1
 
-parsed_data=$(echo -e "$memory_match" | xxd -r -p | awk -F'Q3IoT-' '{print $2}' | tr -cd '0-9')
-only_nums=$(echo "$parsed_data" | tr -cd '0-9' | cut -c -16)
-deviceId="Q3IoT-$only_nums"
-
 echo "Device id: $deviceId"
 
-if [ -z "$deviceId" ]; then
-    echo -e "Device id empty"
+if [ ${#deviceId} -ne 21 ]; then
+    echo "Error: Length of deviceId is not equal to 21 characters." >&2
     mpg123 ./fail.mp3 > /dev/null 2>&1
     exit 1
 fi
@@ -184,7 +180,7 @@ echo "Second print job id: $print_result"
 
 echo "🧹 Cleanup..." 
 rm *.png > /dev/null 2>&1
-rm ram.hex > /dev/null 2>&1
+rm ram.bin > /dev/null 2>&1
 
 mpg123 ./success.mp3 > /dev/null 2>&1
 
