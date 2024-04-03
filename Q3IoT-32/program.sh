@@ -41,7 +41,7 @@ fi
 
 echo "Reading RAM to get device id..."
 
-sleep 10
+sleep 30
 
 program_result=$(nrfjprog --readram ram.hex 2>&1)
 
