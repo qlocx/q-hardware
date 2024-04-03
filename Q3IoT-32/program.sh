@@ -52,7 +52,7 @@ if echo "$program_result" | grep "ERROR"; then
     exit 1
 fi
 
-deviceId=$(strings ram.bin | grep "Q3IoT" | sed 's/.*\(Q3IoT\)/\1/')
+deviceId=$(strings ram.bin | grep "Q3IoT" | sed 's/.*\(Q3IoT\)/\1/' | head -1)
 
 nrfjprog --reset
 
@@ -60,9 +60,50 @@ line_number=1
 
 echo "Device id: $deviceId"
 
-if [ ${#deviceId} -ne 21 ]; then
-    echo "Error: Length of deviceId is not equal to 21 characters." >&2
-    mpg123 ./fail.mp3 > /dev/null 2>&1
+retry_deviceId_count=0
+max_deviceId_retries=9
+retry_deviceId_interval=10
+
+while [ $retry_deviceId_count -lt $max_deviceId_retries ]; do
+    echo "Attempt $((retry_count + 1)): Reading RAM to get device id..."
+    
+    # Read RAM and store the result in read_ram_result
+    read_ram_result=$(nrfjprog --readram ram.bin 2>&1)
+    
+    # Check if an error occurred during the read operation
+    if echo "$read_ram_result" | grep -q "ERROR"; then
+        echo "Error detected when reading RAM."
+        ((retry_count++))
+        echo "Retrying read operation in $retry_deviceId_interval seconds..."
+        sleep $retry_deviceId_interval
+    else
+        echo "RAM read successfully."
+        
+        # Extract device ID from RAM
+        parse_device_id_result=$(strings ram.bin | grep "Q3IoT" | sed 's/.*\(Q3IoT\)/\1/' | head -1)
+        
+     if [ -n "$parse_device_id_result" ]; then
+            # Validate length of deviceId
+            if [ ${#parse_device_id_result} -ne 21 ]; then
+                echo "Error: Length of deviceId is not equal to 21 characters." >&2
+                ((retry_count++))
+                echo "Retrying read operation in $retry_deviceId_interval seconds..."
+                sleep $retry_deviceId_interval
+            else
+                echo "Device ID successfully parsed: $parse_device_id_result"
+                break  # Exit the loop if device ID is found
+            fi
+        else
+            echo "Device ID not found in RAM. Retrying parsing operation in $retry_interval seconds..."
+            ((retry_count++))
+            sleep $retry_interval
+        fi
+    fi
+done
+
+# Check if all retry attempts failed
+if [ $retry_deviceId_count -eq $max_deviceId_retries ]; then
+    echo "All retry attempts failed. Exiting script."
     exit 1
 fi
 
