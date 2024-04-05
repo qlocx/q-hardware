@@ -31,7 +31,7 @@ fi
 
 
 echo "Programming hex file..."
-program_result=$(nrfjprog --program ./releases/v.1.12.0-mfw-1.3.5-ncs-2.6.0-32-ports/merged.hex --verify 2>&1)
+program_result=$(nrfjprog --program ./releases/v.1.11.2-mfw-1.3.5-ncs-2.2.0-32-ports/merged.hex --verify 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
