@@ -37,12 +37,12 @@ if echo "$program_result" | grep "ERROR"; then
     exit 1
 fi
 
-appVersion="1.32.2"
+appVersion="1.14.0"
 mfw="1.3.6"
 ncs="2.6.0"
 
 echo "Programming hex file..."
-program_result=$(nrfjprog --program "./releases/v.$appVersion-mfw-$mfw-ncs-$ncs-$1-ports/merged.hex" --verify 2>&1)
+program_result=$(nrfjprog --program "./releases/v.$appVersion-mfw-$mfw-ncs-$ncs/merged.hex" --verify 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
