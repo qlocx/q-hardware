@@ -1,7 +1,12 @@
 #!/bin/bash
 git reset --hard HEAD
 git pull
+if ! [[ "$1" =~ ^[0-9]+$ ]] || [ "$1" -le 0 ] || [ "$1" -gt 32 ]; then
+  echo "Error: Argument must be a number between 1 and 32"
 
+  echo 'Example: `./q3iot_32.sh 16`, where 16 is the number of ports to be used'
+  exit 1
+fi
 
 RED='\033[1;91m'
 BLACK='\033[1;90m'
@@ -59,7 +64,7 @@ fi
 if [ "$key" = "" ]; then
     echo "Starting Q3 32 programming"
     
-    (cd Q3IoT-32 && ./program.sh)
+    (cd Q3IoT-32 && ./program.sh $1)
 fi
 
 exit 0
