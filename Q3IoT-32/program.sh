@@ -28,7 +28,7 @@ nrfjprog --eraseall > /dev/null 2>&1
 nrfjprog --reset > /dev/null 2>&1
 nrfjprog --recover > /dev/null 2>&1
 echo "Programming mfw file..."
-program_result=$(nrfjprog --program ./mfw_nrf9160_1.3.5.zip --verify 2>&1)
+program_result=$(nrfjprog --program ./mfw_nrf9160_1.3.6.zip --verify 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
