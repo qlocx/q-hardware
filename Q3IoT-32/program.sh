@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if ! [[ "$1" =~ ^[0-9]+$ ]] || [ "$1" -le 0 ] || [ "$1" -gt 32 ]; then
+  echo "Error: Argument must be a number between 1 and 32"
+
+  echo 'Example: `./q3iot_32.sh 16`, where 16 is the number of ports to be used'
+  mpg123 ./fail.mp3 > /dev/null 2>&1
+  exit 1
+fi
+
 echo "Start programming IoT card with 32 ports..."
 echo "Make sure to:"
 echo "1. Connect the debugger to the board and the computer"
@@ -31,7 +39,7 @@ fi
 
 
 echo "Programming hex file..."
-program_result=$(nrfjprog --program ./releases/v.1.11.2-mfw-1.3.5-ncs-2.2.0-32-ports/merged.hex --verify 2>&1)
+program_result=$(nrfjprog --program "./releases/v.1.11.2-mfw-1.3.5-ncs-2.2.0-$1-ports/merged.hex" --verify 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
@@ -91,7 +99,7 @@ else
 fi
 
 echo "📝 Registering device in system..."
-body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\"}"
+body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\", \"numberOfActivePorts\":\"$1\"}"
 
 registration_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$REGISTRATION_URL")
 
@@ -141,7 +149,7 @@ echo "🧪 Running test suite..."
 
 port_idx=0
 
-while [ "$port_idx" -le 31 ]; do
+while [ "$port_idx" -lt "$1" ]; do
     open_port_request_body='{"id":100,"value":"0,500"}'
     open_port_response=$(curl -s -X PUT -d "$open_port_request_body" -H "Content-Type: application/json" "$TEST_SUITE_URL/clients/$deviceId/10351/$port_idx/100?timeout=30&format=TLV")
 
