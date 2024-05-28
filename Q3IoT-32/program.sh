@@ -37,9 +37,12 @@ if echo "$program_result" | grep "ERROR"; then
     exit 1
 fi
 
+appVersion="1.32.2"
+mfw="1.3.6"
+ncs="2.6.0"
 
 echo "Programming hex file..."
-program_result=$(nrfjprog --program "./releases/v.1.11.2-mfw-1.3.5-ncs-2.2.0-$1-ports/merged.hex" --verify 2>&1)
+program_result=$(nrfjprog --program "./releases/v.$appVersion-mfw-$mfw-ncs-$ncs-$1-ports/merged.hex" --verify 2>&1)
 
 if echo "$program_result" | grep "ERROR"; then
     echo -e "Error detected during flashing. Exiting script."
@@ -99,7 +102,7 @@ else
 fi
 
 echo "📝 Registering device in system..."
-body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\", \"numberOfActivePorts\":\"$1\"}"
+body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\", \"numberOfActivePorts\":\"$1\", \"mfw\":\"$mfw\", \"appVersion\":\"$appVersion\", \"ncs\":\"$ncs\"}"
 
 registration_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$REGISTRATION_URL")
 
