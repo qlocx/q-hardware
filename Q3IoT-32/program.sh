@@ -1,13 +1,5 @@
 #!/bin/bash
 
-if ! [[ "$1" =~ ^[0-9]+$ ]] || [ "$1" -le 0 ] || [ "$1" -gt 32 ]; then
-  echo "Error: Argument must be a number between 1 and 32"
-
-  echo 'Example: `./q3iot_32.sh 16`, where 16 is the number of ports to be used'
-  mpg123 ./fail.mp3 > /dev/null 2>&1
-  exit 1
-fi
-
 echo "Start programming IoT card with 32 ports..."
 echo "Make sure to:"
 echo "1. Connect the debugger to the board and the computer"
@@ -152,7 +144,7 @@ echo "🧪 Running test suite..."
 
 port_idx=0
 
-while [ "$port_idx" -lt "$1" ]; do
+while [ "$port_idx" -le 31 ]; do
     open_port_request_body='{"id":100,"value":"0,500"}'
     open_port_response=$(curl -s -X PUT -d "$open_port_request_body" -H "Content-Type: application/json" "$TEST_SUITE_URL/clients/$deviceId/10351/$port_idx/100?timeout=30&format=TLV")
 

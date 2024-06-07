@@ -58,8 +58,7 @@ fi
 if [ "$key" = "" ]; then
     echo "Starting Q3 32 programming"
     
-    # pass on first argument, which is number of ports...
-    (cd Q3IoT-32 && ./program.sh $1)
+    (cd Q3IoT-32 && ./program.sh)
 fi
 
 exit 0
