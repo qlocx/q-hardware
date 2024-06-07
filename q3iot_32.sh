@@ -2,7 +2,6 @@
 git reset --hard HEAD
 git pull
 
-
 RED='\033[1;91m'
 BLACK='\033[1;90m'
 
