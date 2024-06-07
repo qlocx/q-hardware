@@ -94,7 +94,7 @@ else
 fi
 
 echo "📝 Registering device in system..."
-body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\", \"numberOfActivePorts\":\"$1\", \"mfw\":\"$mfw\", \"appVersion\":\"$appVersion\", \"ncs\":\"$ncs\"}"
+body="{\"endpoint\":\"$deviceId\", \"board\":\"q3iot-32\", \"mfw\":\"$mfw\", \"appVersion\":\"$appVersion\", \"ncs\":\"$ncs\"}"
 
 registration_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: $JWT_TOKEN" -d "$body" "$REGISTRATION_URL")
 
